@@ -10,32 +10,32 @@
     tools:context="lu.uni.cityhunter.Home" >
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/imageViewLogo"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/textView1"
+        android:layout_toLeftOf="@+id/textViewAppName"
         android:adjustViewBounds="true"
         android:src="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewSlogan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/imageView1"
+        android:layout_below="@+id/imageViewLogo"
         android:layout_centerHorizontal="true"
-        android:text="The smart city rally"
+        android:text="@string/app_slogan"
         android:textColor="#45AEFF" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignTop="@+id/imageView1"
+        android:layout_alignRight="@+id/textViewSlogan"
+        android:layout_alignTop="@+id/imageViewLogo"
         android:layout_marginTop="7dp"
         android:layout_marginLeft="5dp"
-        android:text="City Hunter"
+        android:text="@string/app_name"
         android:textColor="#45AEFF"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -47,7 +47,7 @@
         android:layout_alignParentBottom="true"
         android:textColor="#FFFFFF"
         android:background="#45AEFF"
-        android:text="All cities" />
+        android:text="@string/all_cities" />
 
     <Button
         android:id="@+id/currentCity"
@@ -58,15 +58,14 @@
         android:layout_marginBottom="16dp"
         android:textColor="#FFFFFF"
         android:background="#45AEFF"
-        android:text="Current city" />
+        android:text="@string/current_city" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageViewCurrentCityPreview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/textViewSlogan"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp"
-        android:src="@drawable/luxembourg_preview" />
+        android:layout_marginTop="66dp" />
 
 </RelativeLayout>

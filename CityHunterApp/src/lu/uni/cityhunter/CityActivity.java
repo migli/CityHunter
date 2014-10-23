@@ -2,8 +2,11 @@ package lu.uni.cityhunter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class CityActivity extends Activity {
@@ -13,8 +16,20 @@ public class CityActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_city);
 		TextView cityName = (TextView) findViewById(R.id.cityName);  
-		City city = (City) getIntent().getParcelableExtra(Home.CITY_PAR_KEY);  
+		City city = (City) getIntent().getParcelableExtra(City.CITY_PAR_KEY);  
 		cityName.setText(city.getName());
+		LinearLayout scrollViewLayout = (LinearLayout) findViewById(R.id.scrollViewLayout);
+		if (city.getMisteries().size() > 0) {
+			
+		} else {
+			TextView noCities = new TextView(CityActivity.this);
+			noCities.setText("No misteries available");
+			noCities.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			noCities.setTextSize(16);
+			noCities.setPadding(0, 400, 0, 0);
+			noCities.setGravity(Gravity.CENTER);
+			scrollViewLayout.addView(noCities);
+		}
 	}
 
 	@Override
