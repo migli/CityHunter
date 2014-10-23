@@ -8,6 +8,8 @@ public class Mistery implements Parcelable {
 	private String title;
 	private String question;
 	private String answer;
+
+	protected final static String MISTERY_PAR_KEY = "lu.uni.mistery.par";
 	
 	public Mistery(String title, String question, String answer) {
 		this.title = title;

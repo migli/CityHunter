@@ -35,10 +35,7 @@ public class AllCitiesActivity extends Activity {
 			    	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
 			    	scrollViewLayout.addView(horizontalLayout);
 		        }
-		    	ImageView image = new ImageView(AllCitiesActivity.this);
-		        image.setBackgroundResource(city.getCoverPicture());
-		        image.setLayoutParams(new LayoutParams(310, 175));
-		        image.setOnClickListener(new OnClickListener() {
+			    OnClickListener cityListener = new OnClickListener() {
 					public void onClick(View view) {
 						Intent intent = new Intent(AllCitiesActivity.this, CityActivity.class);
 						Bundle bundle = new Bundle();  
@@ -46,16 +43,22 @@ public class AllCitiesActivity extends Activity {
 				        intent.putExtras(bundle);
 						startActivity(intent);
 					}
-				});
+				};
+			    ImageView image = new ImageView(AllCitiesActivity.this);
+		        image.setBackgroundResource(city.getCoverPicture());
+		        image.setLayoutParams(new LayoutParams(310, 175));
+		        image.setOnClickListener(cityListener);
 		        TextView name = new TextView(AllCitiesActivity.this);
 		        name.setText(city.getName());
 		        name.setPadding(0, 10, 0, 10);
 		        name.setTypeface(null, Typeface.BOLD);
 		        name.setTextSize(16);
 		        name.setTextColor(Color.parseColor("#45AEFF"));
+		        name.setOnClickListener(cityListener);
 		        TextView description = new TextView(AllCitiesActivity.this);
 		        description.setText(city.getDescription());
 		        description.setLayoutParams(new LayoutParams(310, 310));
+		        description.setOnClickListener(cityListener);
 		        LinearLayout verticalLayout = new LinearLayout(AllCitiesActivity.this);
 		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
 		        if (cities.indexOf(city) % 2 == 0) {
@@ -68,6 +71,11 @@ public class AllCitiesActivity extends Activity {
 		        verticalLayout.addView(description);
 		        horizontalLayout.addView(verticalLayout);
 		    }
+			TextView sources = new TextView(AllCitiesActivity.this);
+			sources.setText("Sources from Wikipedia.");
+			sources.setGravity(Gravity.RIGHT);
+			sources.setTextColor(Color.GRAY);
+			scrollViewLayout.addView(sources);
 		} else {
 			TextView noCities = new TextView(AllCitiesActivity.this);
 			noCities.setText("No cities available");

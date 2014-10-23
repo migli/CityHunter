@@ -16,12 +16,12 @@ public class City implements Parcelable {
 	protected final static String CITY_PAR_KEY = "lu.uni.city.par";
     protected final static String CITY_ARRAY_PAR_KEY = "lu.uni.cityarray.par"; 
 	
-	public City(String name, String description, int previewPicture, int coverPicture) {
+	public City(String name, String description, int previewPicture, int coverPicture, ArrayList<Mistery> misteries) {
 		this.name = name;
 		this.description = description;
 		this.previewPicture = previewPicture;
 		this.coverPicture = coverPicture;
-		this.misteries = new ArrayList<Mistery>();
+		this.misteries = misteries;
 	}
 	
 	public void setName(String name) {
@@ -72,9 +72,10 @@ public class City implements Parcelable {
 		return this.misteries;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static final Parcelable.Creator<City> CREATOR = new Creator<City>() {  
 		  public City createFromParcel(Parcel source) {  
-		      City city = new City(source.readString(), source.readString(), source.readInt(), source.readInt());
+		      City city = new City(source.readString(), source.readString(), source.readInt(), source.readInt(), source.readArrayList(City.class.getClassLoader()));
 		      return city;  
 		  }  
 		  public City[] newArray(int size) {  
@@ -93,6 +94,7 @@ public class City implements Parcelable {
 		dest.writeString(this.description); 
 		dest.writeInt(this.previewPicture);
 		dest.writeInt(this.coverPicture);
+		dest.writeList(this.misteries);
 	}
 
 }

@@ -1,11 +1,19 @@
 package lu.uni.cityhunter;
 
+import java.util.Iterator;
+
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +28,54 @@ public class CityActivity extends Activity {
 		cityName.setText(city.getName());
 		LinearLayout scrollViewLayout = (LinearLayout) findViewById(R.id.scrollViewLayout);
 		if (city.getMisteries().size() > 0) {
-			
+			LinearLayout horizontalLayout = null;
+			for (Iterator<Mistery> i = city.getMisteries().iterator(); i.hasNext(); ) {
+				final Mistery mistery = i.next();
+			    if (city.getMisteries().indexOf(mistery) % 2 == 0) {
+		        	horizontalLayout = new LinearLayout(CityActivity.this);
+			    	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+			    	scrollViewLayout.addView(horizontalLayout);
+		        }
+			    OnClickListener misteryyListener = new OnClickListener() {
+					public void onClick(View view) {
+						/*Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
+						Bundle bundle = new Bundle();  
+				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
+				        intent.putExtras(bundle);
+						startActivity(intent);*/
+					}
+				};
+			    ImageView image = new ImageView(CityActivity.this);
+		        //image.setBackgroundResource(mistery.getCoverPicture());
+		        image.setLayoutParams(new LayoutParams(310, 175));
+		        TextView title = new TextView(CityActivity.this);
+		        title.setText(mistery.getTitle());
+		        title.setPadding(0, 10, 0, 10);
+		        title.setTypeface(null, Typeface.BOLD);
+		        title.setTextSize(16);
+		        title.setTextColor(Color.parseColor("#45AEFF"));
+		        title.setOnClickListener(misteryyListener);
+		        TextView question = new TextView(CityActivity.this);
+		        question.setText(mistery.getQuestion());
+		        question.setLayoutParams(new LayoutParams(310, 310));
+		        question.setOnClickListener(misteryyListener);
+		        LinearLayout verticalLayout = new LinearLayout(CityActivity.this);
+		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
+		        if (city.getMisteries().indexOf(mistery) % 2 == 0) {
+		        	verticalLayout.setPadding(0, 0, 36, 36);
+		        } else {
+		        	verticalLayout.setPadding(0, 0, 0, 36);
+		        }
+		        verticalLayout.addView(image);
+		        verticalLayout.addView(title);
+		        verticalLayout.addView(question);
+		        horizontalLayout.addView(verticalLayout);
+		    }
+			TextView sources = new TextView(CityActivity.this);
+			sources.setText("Sources from Wikipedia.");
+			sources.setGravity(Gravity.RIGHT);
+			sources.setTextColor(Color.GRAY);
+			scrollViewLayout.addView(sources);
 		} else {
 			TextView noCities = new TextView(CityActivity.this);
 			noCities.setText("No misteries available");
