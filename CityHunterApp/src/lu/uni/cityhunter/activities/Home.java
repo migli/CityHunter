@@ -34,7 +34,10 @@ public class Home extends Activity {
 		// Initialize cities array
 		cities = new ArrayList<City>();
 		City luxembourg = new City("Luxembourg", "Luxembourg City lies at the heart of Western Europe, situated 213 km (132 mi) by road from Brussels, 372 km (231 mi) from Paris, 209 km (130 mi) from Cologne.", R.drawable.luxembourg_preview, R.drawable.luxembourg_cover, new ArrayList<Mistery>());
-		luxembourg.setMistery(new Mistery("Mistery 1", "As according to the comic series 'The Hitchhiker's Guide to the Galaxy ', what is the sense of life?", "42", new ArrayList<Challenge>()));
+		Mistery mistery1 = new Mistery("Mistery 1", "As according to the comic series 'The Hitchhiker's Guide to the Galaxy ', what is the sense of life?", "42", new ArrayList<Challenge>());
+		mistery1.setChallenge(new Challenge(R.drawable.gelle_fra_cover));
+		mistery1.setChallenge(new Challenge(R.drawable.palais_cover));
+		luxembourg.setMistery(mistery1);
 		cities.add(luxembourg);
 		City paris = new City("Paris", "Paris is the capital and most populous city of France. Situated on the Seine River, in the north of the country, it is at the heart of the \u00cele-de-France region, also known as the r\u00e9gion parisienne.", 0, R.drawable.paris_cover, new ArrayList<Mistery>());
 		cities.add(paris);

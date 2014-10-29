@@ -1,8 +1,10 @@
 package lu.uni.cityhunter.activities;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.datastructure.Challenge;
 import lu.uni.cityhunter.datastructure.City;
 import lu.uni.cityhunter.datastructure.Mistery;
 
@@ -29,6 +31,8 @@ public class CityActivity extends Activity {
 		TextView cityName = (TextView) findViewById(R.id.cityName);  
 		City city = (City) getIntent().getParcelableExtra(City.CITY_PAR_KEY);  
 		cityName.setText(city.getName());
+		ImageView cityCoverPicture = (ImageView) findViewById(R.id.cityCoverPicture);
+		cityCoverPicture.setImageResource(city.getCoverPicture());
 		LinearLayout scrollViewLayout = (LinearLayout) findViewById(R.id.scrollViewLayout);
 		if (city.getMisteries().size() > 0) {
 			LinearLayout horizontalLayout = null;
@@ -41,15 +45,17 @@ public class CityActivity extends Activity {
 		        }
 			    OnClickListener misteryyListener = new OnClickListener() {
 					public void onClick(View view) {
-						/*Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
+						Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
 						Bundle bundle = new Bundle();  
 				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
 				        intent.putExtras(bundle);
-						startActivity(intent);*/
+						startActivity(intent);
 					}
 				};
 			    ImageView image = new ImageView(CityActivity.this);
-		        //image.setBackgroundResource(mistery.getCoverPicture());
+			    Random rand = new Random();
+			    Challenge randomChallenge = mistery.getChallenge(rand.nextInt(mistery.getChallenges().size()));
+			    image.setBackgroundResource(randomChallenge.getCoverPicture());
 		        image.setLayoutParams(new LayoutParams(310, 175));
 		        TextView title = new TextView(CityActivity.this);
 		        title.setText(mistery.getTitle());
@@ -60,7 +66,7 @@ public class CityActivity extends Activity {
 		        title.setOnClickListener(misteryyListener);
 		        TextView question = new TextView(CityActivity.this);
 		        question.setText(mistery.getQuestion());
-		        question.setLayoutParams(new LayoutParams(310, 310));
+		        question.setLayoutParams(new LayoutParams(310, 210));
 		        question.setOnClickListener(misteryyListener);
 		        LinearLayout verticalLayout = new LinearLayout(CityActivity.this);
 		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
@@ -84,7 +90,7 @@ public class CityActivity extends Activity {
 			noCities.setText("No Misteries");
 			noCities.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			noCities.setTextSize(16);
-			noCities.setPadding(0, 400, 0, 0);
+			noCities.setPadding(0, 200, 0, 0);
 			noCities.setGravity(Gravity.CENTER);
 			scrollViewLayout.addView(noCities);
 		}

@@ -8,20 +8,20 @@ import android.os.Parcelable;
 public class Challenge implements Parcelable {
 
 	private LatLng location;
-	private int picture;
+	private int coverPicture;
 	
 	public final static String CHALLENGE_PAR_KEY = "lu.uni.challenge.par";
 	
-	public Challenge(int picture) {
-		this.picture = picture;
+	public Challenge(int coverPicture) {
+		this.coverPicture = coverPicture;
 	}
 	
-	public void setPicture(int picture) {
-		this.picture = picture;
+	public void setCoverPicture(int coverPicture) {
+		this.coverPicture = coverPicture;
 	}
 	
-	public int getPicture() {
-		return this.picture;
+	public int getCoverPicture() {
+		return this.coverPicture;
 	}
 	
 	public static final Parcelable.Creator<Challenge> CREATOR = new Creator<Challenge>() {  
@@ -41,7 +41,7 @@ public class Challenge implements Parcelable {
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(this.picture);
+		dest.writeInt(this.coverPicture);
 	}
 	
 }
