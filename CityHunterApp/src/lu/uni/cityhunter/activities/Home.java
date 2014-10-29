@@ -1,7 +1,11 @@
 
-package lu.uni.cityhunter;
+package lu.uni.cityhunter.activities;
 
 import java.util.ArrayList;
+
+import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.datastructure.City;
+import lu.uni.cityhunter.datastructure.Mistery;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +17,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 
+/* 
+ * The Home class represent the main activity of our application.
+ * 
+ * @author Christof Ferreira Torres
+ */
 public class Home extends Activity {
 
 	private ArrayList<City> cities;

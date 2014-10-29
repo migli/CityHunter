@@ -1,4 +1,4 @@
-package lu.uni.cityhunter;
+package lu.uni.cityhunter.datastructure;
 
 import java.util.ArrayList;
 
@@ -13,8 +13,8 @@ public class City implements Parcelable {
 	private int coverPicture;
 	private ArrayList<Mistery> misteries;
 	
-	protected final static String CITY_PAR_KEY = "lu.uni.city.par";
-    protected final static String CITY_ARRAY_PAR_KEY = "lu.uni.cityarray.par"; 
+	public final static String CITY_PAR_KEY = "lu.uni.city.par";
+    public final static String CITY_ARRAY_PAR_KEY = "lu.uni.cityarray.par"; 
 	
 	public City(String name, String description, int previewPicture, int coverPicture, ArrayList<Mistery> misteries) {
 		this.name = name;

@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".Home"
+            android:name="lu.uni.cityhunter.activities.Home"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,11 +23,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AllCitiesActivity"
+            android:name="lu.uni.cityhunter.activities.AllCitiesActivity"
             android:label="@string/title_activity_all_cities" >
         </activity>
         <activity
-            android:name=".CityActivity"
+            android:name="lu.uni.cityhunter.activities.CityActivity"
             android:label="@string/title_activity_city" >
         </activity>
     </application>

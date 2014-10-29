@@ -1,7 +1,10 @@
-package lu.uni.cityhunter;
+package lu.uni.cityhunter.activities;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.datastructure.City;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -78,7 +81,7 @@ public class AllCitiesActivity extends Activity {
 			scrollViewLayout.addView(sources);
 		} else {
 			TextView noCities = new TextView(AllCitiesActivity.this);
-			noCities.setText("No cities available");
+			noCities.setText("No Cities");
 			noCities.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			noCities.setTextSize(16);
 			noCities.setPadding(0, 400, 0, 0);

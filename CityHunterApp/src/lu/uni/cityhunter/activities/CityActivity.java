@@ -1,9 +1,12 @@
-package lu.uni.cityhunter;
+package lu.uni.cityhunter.activities;
 
 import java.util.Iterator;
 
+import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.datastructure.City;
+import lu.uni.cityhunter.datastructure.Mistery;
+
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -78,7 +81,7 @@ public class CityActivity extends Activity {
 			scrollViewLayout.addView(sources);
 		} else {
 			TextView noCities = new TextView(CityActivity.this);
-			noCities.setText("No misteries available");
+			noCities.setText("No Misteries");
 			noCities.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			noCities.setTextSize(16);
 			noCities.setPadding(0, 400, 0, 0);

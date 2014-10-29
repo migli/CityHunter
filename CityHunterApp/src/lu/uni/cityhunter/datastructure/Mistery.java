@@ -1,4 +1,4 @@
-package lu.uni.cityhunter;
+package lu.uni.cityhunter.datastructure;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,7 +9,7 @@ public class Mistery implements Parcelable {
 	private String question;
 	private String answer;
 
-	protected final static String MISTERY_PAR_KEY = "lu.uni.mistery.par";
+	public final static String MISTERY_PAR_KEY = "lu.uni.mistery.par";
 	
 	public Mistery(String title, String question, String answer) {
 		this.title = title;
