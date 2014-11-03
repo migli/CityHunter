@@ -41,17 +41,9 @@ public class CityActivity extends Activity {
 			    if (city.getMisteries().indexOf(mistery) % 2 == 0) {
 		        	horizontalLayout = new LinearLayout(CityActivity.this);
 			    	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+			        horizontalLayout.setPadding(0, 0, 0, 36);
 			    	scrollViewLayout.addView(horizontalLayout);
 		        }
-			    OnClickListener misteryyListener = new OnClickListener() {
-					public void onClick(View view) {
-						Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
-						Bundle bundle = new Bundle();  
-				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
-				        intent.putExtras(bundle);
-						startActivity(intent);
-					}
-				};
 			    ImageView image = new ImageView(CityActivity.this);
 			    Random rand = new Random();
 			    Challenge randomChallenge = mistery.getChallenge(rand.nextInt(mistery.getChallenges().size()));
@@ -59,26 +51,40 @@ public class CityActivity extends Activity {
 		        image.setLayoutParams(new LayoutParams(310, 175));
 		        TextView title = new TextView(CityActivity.this);
 		        title.setText(mistery.getTitle());
-		        title.setPadding(0, 10, 0, 10);
+		        title.setPadding(10, 10, 10, 10);
 		        title.setTypeface(null, Typeface.BOLD);
 		        title.setTextSize(16);
 		        title.setTextColor(Color.parseColor("#45AEFF"));
-		        title.setOnClickListener(misteryyListener);
 		        TextView question = new TextView(CityActivity.this);
 		        question.setText(mistery.getQuestion());
 		        question.setLayoutParams(new LayoutParams(310, 210));
-		        question.setOnClickListener(misteryyListener);
+		        question.setPadding(10, 0, 10, 10);
+		        question.setTextSize(13);
 		        LinearLayout verticalLayout = new LinearLayout(CityActivity.this);
 		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
-		        if (city.getMisteries().indexOf(mistery) % 2 == 0) {
-		        	verticalLayout.setPadding(0, 0, 36, 36);
-		        } else {
-		        	verticalLayout.setPadding(0, 0, 0, 36);
-		        }
+		        verticalLayout.setBackgroundColor(Color.WHITE);
+		        verticalLayout.setBackground(getResources().getDrawable(R.drawable.border));
+		        verticalLayout.setPadding(1, 1, 1, 1);
+		        verticalLayout.setClickable(true);
+		        verticalLayout.setOnClickListener(new OnClickListener() {
+					public void onClick(View view) {
+						/*Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
+						Bundle bundle = new Bundle();  
+				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
+				        intent.putExtras(bundle);
+						startActivity(intent);*/
+					}
+				});
 		        verticalLayout.addView(image);
 		        verticalLayout.addView(title);
 		        verticalLayout.addView(question);
 		        horizontalLayout.addView(verticalLayout);
+		        if (city.getMisteries().indexOf(mistery) % 2 == 0) {
+		        	LinearLayout spacer = new LinearLayout(CityActivity.this);
+		        	spacer.setOrientation(LinearLayout.VERTICAL);
+		        	spacer.setLayoutParams(new LayoutParams(36, 0));
+			        horizontalLayout.addView(spacer);
+		        }
 		    }
 			TextView sources = new TextView(CityActivity.this);
 			sources.setText("Sources from Wikipedia.");

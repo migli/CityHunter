@@ -36,9 +36,30 @@ public class AllCitiesActivity extends Activity {
 			    if (cities.indexOf(city) % 2 == 0) {
 		        	horizontalLayout = new LinearLayout(AllCitiesActivity.this);
 			    	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+			        horizontalLayout.setPadding(0, 0, 0, 36);
 			    	scrollViewLayout.addView(horizontalLayout);
 		        }
-			    OnClickListener cityListener = new OnClickListener() {
+			    ImageView image = new ImageView(AllCitiesActivity.this);
+		        image.setBackgroundResource(city.getCoverPicture());
+		        image.setLayoutParams(new LayoutParams(310, 175));
+		        TextView name = new TextView(AllCitiesActivity.this);
+		        name.setText(city.getName());
+		        name.setPadding(10, 10, 10, 10);
+		        name.setTypeface(null, Typeface.BOLD);
+		        name.setTextSize(16);
+		        name.setTextColor(Color.parseColor("#45AEFF"));
+		        TextView description = new TextView(AllCitiesActivity.this);
+		        description.setText(city.getDescription());
+		        description.setLayoutParams(new LayoutParams(310, 310));
+		        description.setPadding(10, 0, 10, 10);
+		        description.setTextSize(13);
+		        LinearLayout verticalLayout = new LinearLayout(AllCitiesActivity.this);
+		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
+		        verticalLayout.setBackgroundColor(Color.WHITE);
+		        verticalLayout.setBackground(getResources().getDrawable(R.drawable.border));
+		        verticalLayout.setPadding(1, 1, 1, 1);
+		        verticalLayout.setClickable(true);
+		        verticalLayout.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
 						Intent intent = new Intent(AllCitiesActivity.this, CityActivity.class);
 						Bundle bundle = new Bundle();  
@@ -46,33 +67,17 @@ public class AllCitiesActivity extends Activity {
 				        intent.putExtras(bundle);
 						startActivity(intent);
 					}
-				};
-			    ImageView image = new ImageView(AllCitiesActivity.this);
-		        image.setBackgroundResource(city.getCoverPicture());
-		        image.setLayoutParams(new LayoutParams(310, 175));
-		        image.setOnClickListener(cityListener);
-		        TextView name = new TextView(AllCitiesActivity.this);
-		        name.setText(city.getName());
-		        name.setPadding(0, 10, 0, 10);
-		        name.setTypeface(null, Typeface.BOLD);
-		        name.setTextSize(16);
-		        name.setTextColor(Color.parseColor("#45AEFF"));
-		        name.setOnClickListener(cityListener);
-		        TextView description = new TextView(AllCitiesActivity.this);
-		        description.setText(city.getDescription());
-		        description.setLayoutParams(new LayoutParams(310, 310));
-		        description.setOnClickListener(cityListener);
-		        LinearLayout verticalLayout = new LinearLayout(AllCitiesActivity.this);
-		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
-		        if (cities.indexOf(city) % 2 == 0) {
-		        	verticalLayout.setPadding(0, 0, 36, 36);
-		        } else {
-		        	verticalLayout.setPadding(0, 0, 0, 36);
-		        }
+				});
 		        verticalLayout.addView(image);
 		        verticalLayout.addView(name);
 		        verticalLayout.addView(description);
 		        horizontalLayout.addView(verticalLayout);
+		        if (cities.indexOf(city) % 2 == 0) {
+		        	LinearLayout spacer = new LinearLayout(AllCitiesActivity.this);
+		        	spacer.setOrientation(LinearLayout.VERTICAL);
+		        	spacer.setLayoutParams(new LayoutParams(36, 0));
+			        horizontalLayout.addView(spacer);
+		        }
 		    }
 			TextView sources = new TextView(AllCitiesActivity.this);
 			sources.setText("Sources from Wikipedia.");
