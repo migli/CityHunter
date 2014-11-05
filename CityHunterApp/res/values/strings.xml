@@ -8,5 +8,6 @@
     <string name="app_slogan">The smart city rally</string>
     <string name="all_cities">All Cities</string>
     <string name="current_city">Current City</string>
+    <string name="title_activity_mistery">Mystery</string>
 
 </resources>

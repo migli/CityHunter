@@ -418,7 +418,7 @@ containing a value of this type.
         public static final int powered_by_google_light=0x7f020029;
     }
     public static final class id {
-        public static final int action_settings=0x7f07001f;
+        public static final int action_settings=0x7f070020;
         public static final int allCities=0x7f07001c;
         public static final int book_now=0x7f070010;
         public static final int buyButton=0x7f07000a;
@@ -434,6 +434,7 @@ containing a value of this type.
         public static final int hybrid=0x7f070004;
         public static final int imageViewCurrentCityPreview=0x7f07001e;
         public static final int imageViewLogo=0x7f070019;
+        public static final int map=0x7f07001f;
         public static final int match_parent=0x7f07000c;
         public static final int monochrome=0x7f070013;
         public static final int none=0x7f070000;
@@ -458,11 +459,13 @@ containing a value of this type.
         public static final int activity_all_cities=0x7f030000;
         public static final int activity_city=0x7f030001;
         public static final int activity_home=0x7f030002;
+        public static final int activity_mystery=0x7f030003;
     }
     public static final class menu {
         public static final int all_cities=0x7f0a0000;
         public static final int city=0x7f0a0001;
         public static final int home=0x7f0a0002;
+        public static final int mystery=0x7f0a0003;
     }
     public static final class string {
         public static final int accept=0x7f050002;
@@ -577,6 +580,7 @@ containing a value of this type.
         public static final int store_picture_title=0x7f050000;
         public static final int title_activity_all_cities=0x7f050025;
         public static final int title_activity_city=0x7f050026;
+        public static final int title_activity_mistery=0x7f05002a;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
          */

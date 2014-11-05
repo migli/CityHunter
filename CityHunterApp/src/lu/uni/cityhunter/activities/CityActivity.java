@@ -7,8 +7,8 @@ import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.datastructure.Challenge;
 import lu.uni.cityhunter.datastructure.City;
 import lu.uni.cityhunter.datastructure.Mistery;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -68,11 +68,11 @@ public class CityActivity extends Activity {
 		        verticalLayout.setClickable(true);
 		        verticalLayout.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						/*Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
+						Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
 						Bundle bundle = new Bundle();  
 				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
 				        intent.putExtras(bundle);
-						startActivity(intent);*/
+						startActivity(intent);
 					}
 				});
 		        verticalLayout.addView(image);
