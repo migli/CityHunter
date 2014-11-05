@@ -31,8 +31,7 @@ public class MisteryActivity extends Activity {
 											.title(mystery.getTitle())
 											.snippet(mystery.getQuestion()));
 
-		// Move the camera instantly to hamburg with a zoom of 15.
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(LUXEMBOURG, 15));
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(LUXEMBOURG, 12));
 
 		// Zoom in, animating the camera.
 		map.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
