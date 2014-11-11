@@ -2,6 +2,8 @@ package lu.uni.cityhunter.datastructure;
 
 import java.util.ArrayList;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -11,16 +13,18 @@ public class City implements Parcelable {
 	private String description;
 	private int previewPicture;
 	private int coverPicture;
+	private LatLng location;
 	private ArrayList<Mistery> misteries;
 	
 	public final static String CITY_PAR_KEY = "lu.uni.city.par";
     public final static String CITY_ARRAY_PAR_KEY = "lu.uni.cityarray.par"; 
 	
-	public City(String name, String description, int previewPicture, int coverPicture, ArrayList<Mistery> misteries) {
+	public City(String name, String description, int previewPicture, int coverPicture, LatLng location, ArrayList<Mistery> misteries) {
 		this.name = name;
 		this.description = description;
 		this.previewPicture = previewPicture;
 		this.coverPicture = coverPicture;
+		this.location = location;
 		this.misteries = misteries;
 	}
 	
@@ -56,6 +60,14 @@ public class City implements Parcelable {
 		return this.coverPicture;
 	}
 	
+	public void setLocation(LatLng location) {
+		this.location = location;
+	}
+	
+	public LatLng getLocation() {
+		return this.location;
+	}
+	
 	public void setMistery(Mistery mistery) {
 		this.misteries.add(mistery);
 	}
@@ -75,7 +87,7 @@ public class City implements Parcelable {
 	@SuppressWarnings("unchecked")
 	public static final Parcelable.Creator<City> CREATOR = new Creator<City>() {  
 		  public City createFromParcel(Parcel source) {  
-		      City city = new City(source.readString(), source.readString(), source.readInt(), source.readInt(), source.readArrayList(City.class.getClassLoader()));
+		      City city = new City(source.readString(), source.readString(), source.readInt(), source.readInt(), (LatLng) source.readParcelable(LatLng.class.getClassLoader()), source.readArrayList(City.class.getClassLoader()));
 		      return city;  
 		  }  
 		  public City[] newArray(int size) {  
@@ -94,6 +106,7 @@ public class City implements Parcelable {
 		dest.writeString(this.description); 
 		dest.writeInt(this.previewPicture);
 		dest.writeInt(this.coverPicture);
+		dest.writeParcelable(location, flags);
 		dest.writeList(this.misteries);
 	}
 

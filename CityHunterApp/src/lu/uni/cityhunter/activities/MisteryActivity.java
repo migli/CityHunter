@@ -25,8 +25,7 @@ public class MisteryActivity extends Activity {
 		setContentView(R.layout.activity_mystery);
 		Mistery mystery = (Mistery) getIntent().getParcelableExtra(Mistery.MISTERY_PAR_KEY);
 		setTitle(mystery.getTitle());
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		Marker luxembourg = map.addMarker(new MarkerOptions()
 											.position(LUXEMBOURG)
 											.title(mystery.getTitle())
