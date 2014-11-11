@@ -27,7 +27,7 @@ public class MisteryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mystery);
-		
+
 		Mistery mistery = (Mistery) getIntent().getParcelableExtra(Mistery.MISTERY_PAR_KEY);
 		setTitle(mistery.getTitle());
 
