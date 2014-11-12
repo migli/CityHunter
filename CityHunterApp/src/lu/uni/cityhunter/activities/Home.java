@@ -40,8 +40,9 @@ public class Home extends Activity implements LocationListener {
 		// Luxembourg
 		City luxembourg = new City("Luxembourg", "Luxembourg City lies at the heart of Western Europe, situated 213 km (132 mi) by road from Brussels, 372 km (231 mi) from Paris, 209 km (130 mi) from Cologne.", R.drawable.luxembourg_preview, R.drawable.luxembourg_cover, new LatLng(49.611498, 6.131750), new ArrayList<Mistery>());
 		Mistery mistery1 = new Mistery("Mistery 1", "As according to the comic series 'The Hitchhiker's Guide to the Galaxy ', what is the sense of life?", "42", new ArrayList<Challenge>());
-		mistery1.setChallenge(new Challenge(R.drawable.gelle_fra_cover));
-		mistery1.setChallenge(new Challenge(R.drawable.palais_cover));
+		mistery1.setChallenge(new Challenge(R.drawable.gelle_fra_cover, new LatLng(49.609350, 6.129358), "The Golden Lady", "You have to do stuff here!"));
+		mistery1.setChallenge(new Challenge(R.drawable.palais_cover, new LatLng(49.610817, 6.132635), "The Palais", "Have fun to disturb the guards... before they are going to play PS3, or PS4!"));
+		mistery1.setChallenge(new Challenge(R.drawable.cathedral, new LatLng(49.609405, 6.131161), "The Cathedral", "Have fun to look at the cathedral which won't be funded by the government anymore in the future"));
 		luxembourg.setMistery(mistery1);
 		cities.add(luxembourg);
 		// Paris

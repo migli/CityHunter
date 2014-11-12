@@ -1,7 +1,12 @@
 package lu.uni.cityhunter.activities;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.datastructure.Challenge;
 import lu.uni.cityhunter.datastructure.Mistery;
+import lu.uni.cityhunter.datastructure.MyInfoWindowAdapter;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +16,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MisteryActivity extends Activity {
@@ -23,18 +27,28 @@ public class MisteryActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_mystery);
-		Mistery mystery = (Mistery) getIntent().getParcelableExtra(Mistery.MISTERY_PAR_KEY);
-		setTitle(mystery.getTitle());
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-		Marker luxembourg = map.addMarker(new MarkerOptions()
-											.position(LUXEMBOURG)
-											.title(mystery.getTitle())
-											.snippet(mystery.getQuestion()));
+		
+		Mistery mistery = (Mistery) getIntent().getParcelableExtra(Mistery.MISTERY_PAR_KEY);
+		setTitle(mistery.getTitle());
 
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(LUXEMBOURG, 12));
-
-		// Zoom in, animating the camera.
-		map.animateCamera(CameraUpdateFactory.zoomTo(12), 2000, null);
+		MyInfoWindowAdapter infoAdapter = new MyInfoWindowAdapter(getLayoutInflater());
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+				.getMap();
+		map.setInfoWindowAdapter(infoAdapter);
+		
+		ArrayList<Challenge> c = mistery.getChallenges();
+		Iterator<Challenge> iter = c.iterator();
+		while(iter.hasNext()){
+			Challenge challenge = iter.next(); 
+			map.addMarker(new MarkerOptions()
+			.position(challenge.getLocation())
+			.title(challenge.getTitle())
+			.snippet(challenge.getDescription()));
+		}
+		
+		// Move the camera instantly to luxembourg with a zoom of 15.
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(LUXEMBOURG, 15));
+		map.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
 	}
 
 	@Override
