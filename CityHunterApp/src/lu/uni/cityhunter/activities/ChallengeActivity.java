@@ -234,14 +234,18 @@ public class ChallengeActivity extends Activity implements SensorEventListener {
 	
 	protected void onResume() {
 	    super.onResume();
-	    sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-	    sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+	    if (challenge instanceof FindDirection) {
+	    	sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+	    	sensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+	    }
 	}
 	 
 	protected void onPause() {
 	    super.onPause();
-	    sensorManager.unregisterListener(this, accelerometer);
-        sensorManager.unregisterListener(this, magnetometer);
+	    if (challenge instanceof FindDirection) {
+	    	sensorManager.unregisterListener(this, accelerometer);
+	    	sensorManager.unregisterListener(this, magnetometer);
+	    }
 	}
 	
 	@Override

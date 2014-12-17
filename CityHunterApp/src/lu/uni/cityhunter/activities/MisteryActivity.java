@@ -5,8 +5,8 @@ import java.util.Iterator;
 
 import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.datastructure.Challenge;
+import lu.uni.cityhunter.datastructure.ChallengeInfoWindow;
 import lu.uni.cityhunter.datastructure.Mistery;
-import lu.uni.cityhunter.datastructure.MyInfoWindowAdapter;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +32,7 @@ public class MisteryActivity extends Activity {
 		Mistery mistery = (Mistery) getIntent().getParcelableExtra(Mistery.MISTERY_PAR_KEY);
 		setTitle(mistery.getTitle());
 
-		MyInfoWindowAdapter infoAdapter = new MyInfoWindowAdapter(getLayoutInflater());
+		ChallengeInfoWindow infoAdapter = new ChallengeInfoWindow(getLayoutInflater());
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
 				.getMap();
 		map.setInfoWindowAdapter(infoAdapter);

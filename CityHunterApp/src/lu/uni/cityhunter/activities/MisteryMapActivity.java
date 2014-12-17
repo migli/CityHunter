@@ -16,6 +16,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,8 +49,8 @@ public class MisteryMapActivity extends FragmentActivity implements OnClickListe
 	private final static float GEOFENCE_RADIUS = 50; // in meters
 	private final static long GEOFENCE_EXPIRATION_DURATION = 1000*60*60*12; 
 	
-//	static final LatLng LUXEMBOURG = new LatLng(49.611498, 6.131750);
-	static final LatLng LUXEMBOURG = new LatLng(49.626597, 6.158986);
+	static final LatLng LUXEMBOURG = new LatLng(49.611498, 6.131750);
+//	static final LatLng LUXEMBOURG = new LatLng(49.626597, 6.158986);
 
 	private boolean isMapFullscreen = false;
 
@@ -112,13 +113,13 @@ public class MisteryMapActivity extends FragmentActivity implements OnClickListe
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Challenge c = (Challenge) parent.getItemAtPosition(position);
-				Toast.makeText(getBaseContext(),c.getTitle(),Toast.LENGTH_SHORT).show();
-//				Intent intent = new Intent(view.getContext(), ??.class);
-//				Bundle bundle = new Bundle();
-//				bundle.putParcelable(Challenge.CHALLENGE_PAR_KEY, c);
-//				intent.putExtras(bundle);
-//				startActivity(intent);
+				Challenge challenge = (Challenge) parent.getItemAtPosition(position);
+				
+				Intent intent = new Intent(view.getContext(), ChallengeActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putParcelable(Challenge.CHALLENGE_PAR_KEY, (Parcelable) challenge);
+				intent.putExtras(bundle);
+				startActivity(intent);
 			}
 		});
 
