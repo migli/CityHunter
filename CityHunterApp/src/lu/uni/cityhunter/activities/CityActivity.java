@@ -69,8 +69,7 @@ public class CityActivity extends Activity {
 		        verticalLayout.setClickable(true);
 		        verticalLayout.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						//Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
-						Intent intent = new Intent(CityActivity.this, ChallengeActivity.class);
+						Intent intent = new Intent(CityActivity.this, MisteryTabActivity.class);
 						Bundle bundle = new Bundle();  
 				        //bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
 						bundle.putParcelable(Challenge.CHALLENGE_PAR_KEY, (Parcelable) mistery.getChallenge(4));  

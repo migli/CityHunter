@@ -8,11 +8,11 @@ import android.widget.TextView;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.model.Marker;
 
-public class MyInfoWindowAdapter implements InfoWindowAdapter{
+public class ChallengeInfoWindowAdapter implements InfoWindowAdapter{
 
 	private LayoutInflater layoutInflater;
 	
-	public MyInfoWindowAdapter(LayoutInflater layoutInflater){
+	public ChallengeInfoWindowAdapter(LayoutInflater layoutInflater){
 		this.layoutInflater = layoutInflater;
 	}
 	

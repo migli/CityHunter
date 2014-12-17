@@ -25,5 +25,6 @@
     <string name="author_christof">Christof Ferreira Torres\n(christof.ferreira.001@student.uni.lu)</string>
     <string name="author_angelo">Angelo Migliosi\n(angelo.migliosi.001@student.uni.lu)</string>
     <string name="about_copyright">Version 1.0 © Copyright 2014.</string>
+    <string name="title_activity_mistery_tab">Mystery</string>
 
 </resources>
