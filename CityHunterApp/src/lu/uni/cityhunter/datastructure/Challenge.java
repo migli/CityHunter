@@ -2,23 +2,40 @@ package lu.uni.cityhunter.datastructure;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+public abstract class Challenge {
 
-public class Challenge implements Parcelable {
-
-	private LatLng location;
-	private int coverPicture;
-	private String description;
 	private String title;
+	private String description;
+	private int coverPicture;
+	private LatLng location;
+	private ChallengeState state;
+	private int nrOfTries;
 	
 	public final static String CHALLENGE_PAR_KEY = "lu.uni.challenge.par";
 	
-	public Challenge(int coverPicture, LatLng location, String title, String description) {
-		this.coverPicture = coverPicture;
-		this.location = location;
+	public Challenge(String title, String description, int coverPicture, LatLng location, ChallengeState state, int nrOfTries) {
 		this.title = title;
 		this.description = description;
+		this.coverPicture = coverPicture;
+		this.location = location;
+		this.state = state;
+		this.nrOfTries = nrOfTries;
+	}
+	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public String getTitle() {
+		return this.title;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	
+	public String getDescription() {
+		return this.description;
 	}
 	
 	public void setCoverPicture(int coverPicture) {
@@ -37,44 +54,20 @@ public class Challenge implements Parcelable {
 		return this.location;
 	}
 	
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
+	public void setState(ChallengeState state) {
+		this.state = state;
 	}
 	
-	public static final Parcelable.Creator<Challenge> CREATOR = new Creator<Challenge>() {  
-		  public Challenge createFromParcel(Parcel source) {  
-			  Challenge challenge = new Challenge(source.readInt(), (LatLng) source.readParcelable(LatLng.class.getClassLoader()), source.readString(), source.readString());
-		      return challenge;  
-		  }  
-		  public Challenge[] newArray(int size) {  
-		      return new Challenge[size];  
-		  }  
-	};  
-	
-	@Override
-	public int describeContents() {
-		return 0;
-	}
-
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeInt(this.coverPicture);
-		dest.writeParcelable(location, flags);
-		dest.writeString(this.title);
-		dest.writeString(this.description);
+	public ChallengeState getState() {
+		return this.state;
 	}
 	
+	public void setNrOfTries(int nrOfTries) {
+		this.nrOfTries = nrOfTries;
+	}
+	
+	public int getNrOfTries() {
+		return this.nrOfTries;
+	}
 	
 }

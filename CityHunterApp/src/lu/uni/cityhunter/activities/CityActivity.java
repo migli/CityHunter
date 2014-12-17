@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,16 +64,18 @@ public class CityActivity extends Activity {
 		        LinearLayout verticalLayout = new LinearLayout(CityActivity.this);
 		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
 		        verticalLayout.setBackgroundColor(Color.WHITE);
-		        verticalLayout.setBackground(getResources().getDrawable(R.drawable.border));
+		        verticalLayout.setBackground(getResources().getDrawable(R.layout.border));
 		        verticalLayout.setPadding(1, 1, 1, 1);
 		        verticalLayout.setClickable(true);
 		        verticalLayout.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
+						//Intent intent = new Intent(CityActivity.this, MisteryActivity.class);
+						Intent intent = new Intent(CityActivity.this, ChallengeActivity.class);
 						Bundle bundle = new Bundle();  
-				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
+				        //bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
+						bundle.putParcelable(Challenge.CHALLENGE_PAR_KEY, (Parcelable) mistery.getChallenge(4));  
 				        intent.putExtras(bundle);
-						startActivity(intent);
+				        startActivityForResult(intent, 1);
 					}
 				});
 		        verticalLayout.addView(image);
@@ -114,10 +117,15 @@ public class CityActivity extends Activity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (item.getItemId()) {
+			case R.id.action_settings: 
+				startActivity(new Intent(CityActivity.this, SettingsActivity.class));
+				return true;
+			case R.id.action_about: 
+				startActivity(new Intent(CityActivity.this, AboutActivity.class));
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 }

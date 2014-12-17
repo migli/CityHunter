@@ -8,6 +8,7 @@ import lu.uni.cityhunter.datastructure.Challenge;
 import lu.uni.cityhunter.datastructure.Mistery;
 import lu.uni.cityhunter.datastructure.MyInfoWindowAdapter;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,10 +64,15 @@ public class MisteryActivity extends Activity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch (item.getItemId()) {
+			case R.id.action_settings: 
+				startActivity(new Intent(MisteryActivity.this, SettingsActivity.class));
+				return true;
+			case R.id.action_about: 
+				startActivity(new Intent(MisteryActivity.this, AboutActivity.class));
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
-		return super.onOptionsItemSelected(item);
 	}
 }
