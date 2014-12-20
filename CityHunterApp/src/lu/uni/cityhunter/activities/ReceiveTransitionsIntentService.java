@@ -19,7 +19,7 @@ public class ReceiveTransitionsIntentService extends IntentService{
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		if(LocationClient.hasError(intent)){
-			// Do nothing... Shit happens^^
+			// Do nothing...
 			Toast.makeText(this, "Error in transition intent!", Toast.LENGTH_SHORT);
 		}else{
 			int transitionType = LocationClient.getGeofenceTransition(intent);
