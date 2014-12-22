@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/cityCoverPicture"
         android:layout_width="fill_parent"
-        android:layout_height="180dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:contentDescription="@string/city_cover_picture"

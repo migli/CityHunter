@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.datastructure.City;
-
+import lu.uni.cityhunter.persitence.City;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,31 +29,19 @@ public class AllCitiesActivity extends Activity {
 		setContentView(R.layout.activity_all_cities);
 		ArrayList<City> cities = getIntent().getParcelableArrayListExtra(City.CITY_ARRAY_PAR_KEY);  
 		LinearLayout scrollViewLayout = (LinearLayout) findViewById(R.id.scrollViewLayout);
-		if (cities.size() > 0) {
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        if (cities.size() > 0) {
 			LinearLayout horizontalLayout = null;
 			for (Iterator<City> i = cities.iterator(); i.hasNext(); ) {
 				final City city = i.next();
 			    if (cities.indexOf(city) % 2 == 0) {
 		        	horizontalLayout = new LinearLayout(AllCitiesActivity.this);
-			    	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+		        	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
 			        horizontalLayout.setPadding(0, 0, 0, 36);
 			    	scrollViewLayout.addView(horizontalLayout);
 		        }
-			    ImageView image = new ImageView(AllCitiesActivity.this);
-		        image.setBackgroundResource(city.getCoverPicture());
-		        image.setLayoutParams(new LayoutParams(310, 175));
-		        TextView name = new TextView(AllCitiesActivity.this);
-		        name.setText(city.getName());
-		        name.setPadding(10, 10, 10, 10);
-		        name.setTypeface(null, Typeface.BOLD);
-		        name.setTextSize(16);
-		        name.setTextColor(Color.parseColor("#45AEFF"));
-		        TextView description = new TextView(AllCitiesActivity.this);
-		        description.setText(city.getDescription());
-		        description.setLayoutParams(new LayoutParams(310, 310));
-		        description.setPadding(10, 0, 10, 10);
-		        description.setTextSize(13);
-		        LinearLayout verticalLayout = new LinearLayout(AllCitiesActivity.this);
+			    LinearLayout verticalLayout = new LinearLayout(AllCitiesActivity.this);
 		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
 		        verticalLayout.setBackgroundColor(Color.WHITE);
 		        verticalLayout.setBackground(getResources().getDrawable(R.layout.border));
@@ -68,8 +56,23 @@ public class AllCitiesActivity extends Activity {
 						startActivity(intent);
 					}
 				});
+		        verticalLayout.setLayoutParams(new LayoutParams((displaymetrics.widthPixels - 36 * 3) / 2, displaymetrics.heightPixels / 2 - 2 * 36));
+		        ImageView image = new ImageView(AllCitiesActivity.this);
+		        image.setBackgroundResource(city.getCoverPicture());
+		        image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.5f));
 		        verticalLayout.addView(image);
+		        TextView name = new TextView(AllCitiesActivity.this);
+		        name.setText(city.getName());
+		        name.setPadding(10, 10, 10, 10);
+		        name.setTypeface(null, Typeface.BOLD);
+		        name.setTextSize(16);
+		        name.setTextColor(Color.parseColor("#45AEFF"));
 		        verticalLayout.addView(name);
+		        TextView description = new TextView(AllCitiesActivity.this);
+		        description.setText(city.getDescription());
+		        description.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
+		        description.setPadding(10, 0, 10, 10);
+		        description.setTextSize(13);
 		        verticalLayout.addView(description);
 		        horizontalLayout.addView(verticalLayout);
 		        if (cities.indexOf(city) % 2 == 0) {
@@ -110,6 +113,9 @@ public class AllCitiesActivity extends Activity {
 		switch (item.getItemId()) {
 			case R.id.action_settings: 
 				startActivity(new Intent(AllCitiesActivity.this, SettingsActivity.class));
+				return true;
+			case R.id.action_help: 
+				startActivity(new Intent(AllCitiesActivity.this, HelpActivity.class));
 				return true;
 			case R.id.action_about: 
 				startActivity(new Intent(AllCitiesActivity.this, AboutActivity.class));

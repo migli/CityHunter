@@ -16,7 +16,7 @@
     <string name="city_cover_picture">This represents the cover picture of the current city.</string>
     <string name="title_activity_settings">Settings</string>
     <string name="reset_button">Reset</string>
-    <string name="reset_description">Resetting will erase all of your saved progess such that all challenges will be reset.</string>
+    <string name="reset_description">Resetting will erase all of your saved progess such that all challenges and your score will be reset.</string>
     <string name="action_about">About</string>
     <string name="title_activity_about">About</string>
     <string name="about_slogan">The smart city rally app.</string>
@@ -24,7 +24,10 @@
     <string name="title_authors">Authors</string>
     <string name="author_christof">Christof Ferreira Torres\n(christof.ferreira.001@student.uni.lu)</string>
     <string name="author_angelo">Angelo Migliosi\n(angelo.migliosi.001@student.uni.lu)</string>
-    <string name="about_copyright">Version 1.0 © Copyright 2014.</string>
-    <string name="title_activity_mistery_tab">Mystery</string>
+    <string name="title_activity_mystery_tab">Mystery</string>
+    <string name="score">Score</string>
+    <string name="title_activity_help">Help</string>
+    <string name="action_help">Help</string>
+    <string name="help_description">Be the ultimate city hunter! The goal consists in resolving as many mysteries as possible across many different citites. To solve a given mystery, you must visit several checkpoints across the city and solve challenges. For each successful challenge you increase your score. If you successfully solve each of the challenges, then you are granted a hint which should help you get closer to solve the given mystery. Enough of talking, now go out there and solve some mysteries!</string>
 
 </resources>

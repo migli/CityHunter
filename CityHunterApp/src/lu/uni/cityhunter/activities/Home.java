@@ -1,18 +1,25 @@
 
 package lu.uni.cityhunter.activities;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.challenges.ChooseDate;
-import lu.uni.cityhunter.challenges.ChoosePicture;
-import lu.uni.cityhunter.challenges.FindDirection;
-import lu.uni.cityhunter.challenges.GuessName;
-import lu.uni.cityhunter.datastructure.Challenge;
-import lu.uni.cityhunter.datastructure.City;
-import lu.uni.cityhunter.datastructure.Mistery;
+import lu.uni.cityhunter.persitence.Challenge;
+import lu.uni.cityhunter.persitence.ChallengeType;
+import lu.uni.cityhunter.persitence.City;
+import lu.uni.cityhunter.persitence.CompassChallenge;
+import lu.uni.cityhunter.persitence.Mystery;
+import lu.uni.cityhunter.persitence.QuestionChallenge;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -23,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -34,6 +42,9 @@ import com.google.android.gms.maps.model.LatLng;
 public class Home extends Activity implements LocationListener {
 
 	private ArrayList<City> cities;
+	private SharedPreferences sharedPreferences;
+	
+	public static final String SCORE_PREFERENCES = "uni.lu.cityhunter.score";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,28 +52,82 @@ public class Home extends Activity implements LocationListener {
 		setContentView(R.layout.activity_home);
 		// Initialize cities array
 		cities = new ArrayList<City>();
-		// Luxembourg
-		City luxembourg = new City("Luxembourg", "Luxembourg City lies at the heart of Western Europe, situated 213 km (132 mi) by road from Brussels, 372 km (231 mi) from Paris, 209 km (130 mi) from Cologne.", R.drawable.luxembourg_preview, R.drawable.luxembourg_cover, new LatLng(49.611498, 6.131750), new ArrayList<Mistery>());
-		Mistery mistery1 = new Mistery("Mistery 1", "As according to the comic series 'The Hitchhiker's Guide to the Galaxy ', what is the sense of life?", "42", new ArrayList<Challenge>());
-		
-		mistery1.setChallenge(new ChooseDate("G\u00eblle Fra", "The G\u00eblle Fra (Golden Lady) is a war memorial dedicated to the volunteers of WWI. The Nazis dismantled the memorial in 1940 and it remained unaccounted until 1980.\n\nIn which year did Grand Duke Jean unveil the memorial back to the public?", R.drawable.gelle_fra_cover, new LatLng(49.609350, 6.129358), null, 2, new int[]{1980, 1986, 1991}, 1985));
-		mistery1.setChallenge(new ChoosePicture("Notre-Dame Cathedral", "Which one of these members of the Grand-Ducal family is not burried in the crypt of the Cathedral?", R.drawable.cathedral, new LatLng(49.609405, 6.131161), null, 2, new int[]{R.drawable.john_the_blind, R.drawable.marie_anne_of_portugal, R.drawable.charlotte_grand_duchess_of_luxembourg}, new String[]{"John the Blind", "Marie Anne of Portugal", "Charlotte, Grand Duchess of Luxembourg"}, R.drawable.adolphe_grand_duke_of_luxembourg, "Adolphe, Grand Duke of Luxembourg"));
-		mistery1.setChallenge(new GuessName("Place Guillaume II", "How do locals call this place?", R.drawable.place_guillaume, new LatLng(49.610833, 6.130278) , null, 3, "Knuedler"));
-		mistery1.setChallenge(new ChoosePicture("Grand Ducal Palace", "Which one of these guards is a guard of the Grand Ducal Palace?", R.drawable.palais_cover, new LatLng(49.610817, 6.132635), null, 2, new int[]{R.drawable.british_guard, R.drawable.russian_guard, R.drawable.swiss_guard}, new String[]{"", "", ""}, R.drawable.luxemburgish_guard, ""));
-		mistery1.setChallenge(new FindDirection("Place de Clairefontaine", "Turn your phone in the direction that Grand Duchess Charlotte is pointing at and maintain this direction for 30 seconds.", R.drawable.place_clairefontaine, new LatLng(49.609849, 6.132466), null, 2, 110, 30));
-
-		luxembourg.setMistery(mistery1);
-		cities.add(luxembourg);
-		// Paris
-		City paris = new City("Paris", "Paris is the capital and most populous city of France. Situated on the Seine River, in the north of the country, it is at the heart of the \u00cele-de-France region, also known as the r\u00e9gion parisienne.", 0, R.drawable.paris_cover, new LatLng(48.8567, 2.3508), new ArrayList<Mistery>());
-		cities.add(paris);
-		// Lisbon
-		City lisbon = new City("Lisbon", "Lisbon is the capital and the largest city of Portugal. It is the westernmost large city located in continental Europe, as well as its westernmost capital city and the only one along the Atlantic coast.", 0, R.drawable.lisbon_cover, new LatLng(38.713811, -9.139386), new ArrayList<Mistery>());
-		cities.add(lisbon);
-		// Dublin
-		City dublin = new City("Dublin", "Dublin is the capital and largest city of Ireland. Dublin is in the province of Leinster on Ireland's east coast, at the mouth of the River Liffey.", 0, R.drawable.dublin_cover, new LatLng(53.347778, -6.259722), new ArrayList<Mistery>());
-		cities.add(dublin);
-		// Hide initially he current city button and preview
+		// Load persistent data which is stored as JSON in assets
+		JSONObject jsonObject;
+		try {
+			jsonObject = new JSONObject(loadJSONFromAsset("persistent_data.json"));
+			JSONArray jsonCities = jsonObject.getJSONArray("cities");
+			for (int i = 0; i < jsonCities.length(); i++) {
+				City city = new City(
+						jsonCities.getJSONObject(i).getString("name"), 
+						jsonCities.getJSONObject(i).getString("description"), 
+						Integer.parseInt(jsonCities.getJSONObject(i).getString("previewPicture"), 16),
+						Integer.parseInt(jsonCities.getJSONObject(i).getString("coverPicture"), 16),
+						new LatLng(jsonCities.getJSONObject(i).getJSONObject("location").getDouble("latitude"), jsonCities.getJSONObject(i).getJSONObject("location").getDouble("longitude")), 
+						new ArrayList<Mystery>());
+				JSONArray jsonMysteries = jsonCities.getJSONObject(i).getJSONArray("mysteries");
+				for (int j = 0; j < jsonMysteries.length(); j++) {
+					Mystery mystery = new Mystery(
+							jsonMysteries.getJSONObject(j).getString("title"), 
+							jsonMysteries.getJSONObject(j).getString("question"), 
+							jsonMysteries.getJSONObject(j).getString("answer"), 
+							new ArrayList<Challenge>());
+					JSONArray jsonChallenges = jsonMysteries.getJSONObject(j).getJSONArray("challenges");
+					for (int k = 0; k < jsonChallenges.length(); k++) {
+						ChallengeType challengeType = ChallengeType.valueOf(jsonChallenges.getJSONObject(k).getString("challengeType"));
+						switch (challengeType) {
+							case CHOOSE_DATE: 
+							case CHOOSE_PICTURE:
+							case GUESS_NAME:
+								JSONArray jsonPossibleAnswers = jsonChallenges.getJSONObject(k).getJSONArray("possibleAnswers");
+								String[] possibleAnswers = new String[jsonPossibleAnswers.length()];
+								for (int l = 0; l < jsonPossibleAnswers.length(); l++) {
+									possibleAnswers[l] = jsonPossibleAnswers.getString(l);
+								}
+								JSONArray jsonPossibleAnswerDescriptions = jsonChallenges.getJSONObject(k).getJSONArray("possibleAnswerDescriptions");
+								String[] possibleAnswerDescriptions = new String[jsonPossibleAnswerDescriptions.length()];
+								for (int l = 0; l < jsonPossibleAnswerDescriptions.length(); l++) {
+									possibleAnswerDescriptions[l] = jsonPossibleAnswerDescriptions.getString(l);
+								}								
+								mystery.setChallenge(new QuestionChallenge(
+										jsonChallenges.getJSONObject(k).getString("title"), 
+										jsonChallenges.getJSONObject(k).getString("description"),
+										Integer.parseInt(jsonChallenges.getJSONObject(k).getString("coverPicture"), 16), 
+										new LatLng(jsonChallenges.getJSONObject(k).getJSONObject("location").getDouble("latitude"), jsonChallenges.getJSONObject(k).getJSONObject("location").getDouble("longitude")), 
+										jsonChallenges.getJSONObject(k).getInt("maxNrOfTries"), 
+										challengeType, 
+										possibleAnswers, 
+										possibleAnswerDescriptions, 
+										jsonChallenges.getJSONObject(k).getString("answer"),
+										jsonChallenges.getJSONObject(k).getString("answerDescription")));
+								break;
+							case FIND_DIRECTION:
+								mystery.setChallenge(new CompassChallenge(
+										jsonChallenges.getJSONObject(k).getString("title"), 
+										jsonChallenges.getJSONObject(k).getString("description"),
+										Integer.parseInt(jsonChallenges.getJSONObject(k).getString("coverPicture"), 16), 
+										new LatLng(jsonChallenges.getJSONObject(k).getJSONObject("location").getDouble("latitude"), jsonChallenges.getJSONObject(k).getJSONObject("location").getDouble("longitude")), 
+										jsonChallenges.getJSONObject(k).getInt("maxNrOfTries"),
+										challengeType,
+										jsonChallenges.getJSONObject(k).getInt("direction"), 
+										jsonChallenges.getJSONObject(k).getInt("time")));
+								break;
+							default:
+								break;
+						}
+					}
+					city.setMystery(mystery);
+				}
+				cities.add(city);
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		// Load and display score
+		sharedPreferences = getSharedPreferences(SCORE_PREFERENCES, MODE_PRIVATE);
+		TextView score = (TextView) findViewById(R.id.textViewScore);
+		score.setText("Score: " + String.valueOf(sharedPreferences.getInt("score", 0)));
+		// Hide initially the current city button and preview
 		ImageView currentCityPreview = (ImageView) findViewById(R.id.imageViewCurrentCityPreview);
 		currentCityPreview.setVisibility(View.INVISIBLE);
 		Button currentCityBtn = (Button) findViewById(R.id.currentCity);
@@ -99,6 +164,9 @@ public class Home extends Activity implements LocationListener {
 			case R.id.action_settings: 
 				startActivity(new Intent(Home.this, SettingsActivity.class));
 				return true;
+			case R.id.action_help: 
+				startActivity(new Intent(Home.this, HelpActivity.class));
+				return true;
 			case R.id.action_about: 
 				startActivity(new Intent(Home.this, AboutActivity.class));
 				return true;
@@ -107,6 +175,15 @@ public class Home extends Activity implements LocationListener {
 		}
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		// Load and display score
+		sharedPreferences = getSharedPreferences(SCORE_PREFERENCES, MODE_PRIVATE);
+		TextView score = (TextView) findViewById(R.id.textViewScore);
+		score.setText("Score: " + String.valueOf(sharedPreferences.getInt("score", 0)));
+	}
+	
 	@Override
 	public void onLocationChanged(Location location) {
 		final City currentCity;
@@ -166,4 +243,21 @@ public class Home extends Activity implements LocationListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private String loadJSONFromAsset(String fileName) {
+	    String JSON = null;
+	    try {
+	        InputStream inputStream = getAssets().open(fileName);
+	        int size = inputStream.available();
+	        byte[] buffer = new byte[size];
+	        inputStream.read(buffer);
+	        inputStream.close();
+	        JSON = new String(buffer, "UTF-8");
+	    } catch (IOException ex) {
+	        ex.printStackTrace();
+	        return null;
+	    }
+	    return JSON;
+	}
+	
 }

@@ -4,15 +4,15 @@ import java.util.Iterator;
 import java.util.Random;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.datastructure.Challenge;
-import lu.uni.cityhunter.datastructure.City;
-import lu.uni.cityhunter.datastructure.Mistery;
+import lu.uni.cityhunter.persitence.Challenge;
+import lu.uni.cityhunter.persitence.City;
+import lu.uni.cityhunter.persitence.Mystery;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,34 +34,23 @@ public class CityActivity extends Activity {
 		cityName.setText(city.getName());
 		ImageView cityCoverPicture = (ImageView) findViewById(R.id.cityCoverPicture);
 		cityCoverPicture.setImageResource(city.getCoverPicture());
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        LayoutParams layout = cityCoverPicture.getLayoutParams();
+        layout.height = displaymetrics.heightPixels * 1/3 - 36;
+		cityCoverPicture.requestLayout();
 		LinearLayout scrollViewLayout = (LinearLayout) findViewById(R.id.scrollViewLayout);
-		if (city.getMisteries().size() > 0) {
+        if (city.getMysteries().size() > 0) {
 			LinearLayout horizontalLayout = null;
-			for (Iterator<Mistery> i = city.getMisteries().iterator(); i.hasNext(); ) {
-				final Mistery mistery = i.next();
-			    if (city.getMisteries().indexOf(mistery) % 2 == 0) {
+			for (Iterator<Mystery> i = city.getMysteries().iterator(); i.hasNext(); ) {
+				final Mystery mystery = i.next();
+			    if (city.getMysteries().indexOf(mystery) % 2 == 0) {
 		        	horizontalLayout = new LinearLayout(CityActivity.this);
 			    	horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
 			        horizontalLayout.setPadding(0, 0, 0, 36);
 			    	scrollViewLayout.addView(horizontalLayout);
 		        }
-			    ImageView image = new ImageView(CityActivity.this);
-			    Random rand = new Random();
-			    Challenge randomChallenge = mistery.getChallenge(rand.nextInt(mistery.getChallenges().size()));
-			    image.setBackgroundResource(randomChallenge.getCoverPicture());
-		        image.setLayoutParams(new LayoutParams(310, 175));
-		        TextView title = new TextView(CityActivity.this);
-		        title.setText(mistery.getTitle());
-		        title.setPadding(10, 10, 10, 10);
-		        title.setTypeface(null, Typeface.BOLD);
-		        title.setTextSize(16);
-		        title.setTextColor(Color.parseColor("#45AEFF"));
-		        TextView question = new TextView(CityActivity.this);
-		        question.setText(mistery.getQuestion());
-		        question.setLayoutParams(new LayoutParams(310, 210));
-		        question.setPadding(10, 0, 10, 10);
-		        question.setTextSize(13);
-		        LinearLayout verticalLayout = new LinearLayout(CityActivity.this);
+			    LinearLayout verticalLayout = new LinearLayout(CityActivity.this);
 		        verticalLayout.setOrientation(LinearLayout.VERTICAL);
 		        verticalLayout.setBackgroundColor(Color.WHITE);
 		        verticalLayout.setBackground(getResources().getDrawable(R.layout.border));
@@ -69,18 +58,37 @@ public class CityActivity extends Activity {
 		        verticalLayout.setClickable(true);
 		        verticalLayout.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						Intent intent = new Intent(CityActivity.this, MisteryTabActivity.class);
+						Intent intent = new Intent(CityActivity.this, MysteryTabActivity.class);
 						Bundle bundle = new Bundle();  
-				        bundle.putParcelable(Mistery.MISTERY_PAR_KEY, mistery);  
+				        bundle.putParcelable(Mystery.MYSTERY_PAR_KEY, mystery);  
 				        intent.putExtras(bundle);
-				        startActivityForResult(intent, 1);
+				        startActivity(intent);
 					}
 				});
+		        verticalLayout.setLayoutParams(new LayoutParams((displaymetrics.widthPixels - 36 * 3) / 2, displaymetrics.heightPixels / 2 - 2 * 36));
+		        ImageView image = new ImageView(CityActivity.this);
+		        if (mystery.getChallenges().size() > 0) {
+				    Random rand = new Random();
+				    Challenge randomChallenge = mystery.getChallenge(rand.nextInt(mystery.getChallenges().size()));
+				    image.setBackgroundResource(randomChallenge.getCoverPicture());
+		        }
+		        image.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.5f));
 		        verticalLayout.addView(image);
+		        TextView title = new TextView(CityActivity.this);
+		        title.setText(mystery.getTitle());
+		        title.setPadding(10, 10, 10, 10);
+		        title.setTypeface(null, Typeface.BOLD);
+		        title.setTextSize(16);
+		        title.setTextColor(Color.parseColor("#45AEFF"));
 		        verticalLayout.addView(title);
+		        TextView question = new TextView(CityActivity.this);
+		        question.setText(mystery.getQuestion());
+		        question.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT, 1.0f));
+		        question.setPadding(10, 0, 10, 10);
+		        question.setTextSize(13);
 		        verticalLayout.addView(question);
 		        horizontalLayout.addView(verticalLayout);
-		        if (city.getMisteries().indexOf(mistery) % 2 == 0) {
+		        if (city.getMysteries().indexOf(mystery) % 2 == 0) {
 		        	LinearLayout spacer = new LinearLayout(CityActivity.this);
 		        	spacer.setOrientation(LinearLayout.VERTICAL);
 		        	spacer.setLayoutParams(new LayoutParams(36, 0));
@@ -118,6 +126,9 @@ public class CityActivity extends Activity {
 		switch (item.getItemId()) {
 			case R.id.action_settings: 
 				startActivity(new Intent(CityActivity.this, SettingsActivity.class));
+				return true;
+			case R.id.action_help: 
+				startActivity(new Intent(CityActivity.this, HelpActivity.class));
 				return true;
 			case R.id.action_about: 
 				startActivity(new Intent(CityActivity.this, AboutActivity.class));

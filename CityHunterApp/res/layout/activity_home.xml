@@ -68,4 +68,16 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="66dp" />
 
+    <TextView
+        android:id="@+id/textViewScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewSlogan"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:text="@string/score"
+        android:textColor="#45AEFF"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 </RelativeLayout>
