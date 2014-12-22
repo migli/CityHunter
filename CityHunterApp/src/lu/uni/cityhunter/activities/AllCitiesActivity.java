@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.persitence.City;
+import lu.uni.cityhunter.persistence.City;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;

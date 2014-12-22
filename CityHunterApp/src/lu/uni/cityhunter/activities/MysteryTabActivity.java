@@ -1,7 +1,7 @@
 package lu.uni.cityhunter.activities;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.persitence.Mystery;
+import lu.uni.cityhunter.persistence.Mystery;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;

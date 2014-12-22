@@ -5,7 +5,7 @@ import java.util.TimerTask;
 
 import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.activities.ChallengeActivity;
-import lu.uni.cityhunter.persitence.CompassChallenge;
+import lu.uni.cityhunter.persistence.CompassChallenge;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;

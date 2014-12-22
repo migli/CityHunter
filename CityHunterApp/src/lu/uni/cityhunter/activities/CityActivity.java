@@ -4,9 +4,9 @@ import java.util.Iterator;
 import java.util.Random;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.persitence.Challenge;
-import lu.uni.cityhunter.persitence.City;
-import lu.uni.cityhunter.persitence.Mystery;
+import lu.uni.cityhunter.persistence.Challenge;
+import lu.uni.cityhunter.persistence.City;
+import lu.uni.cityhunter.persistence.Mystery;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;

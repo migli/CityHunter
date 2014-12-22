@@ -3,7 +3,7 @@ package lu.uni.cityhunter.activities;
 import java.util.ArrayList;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.persitence.Challenge;
+import lu.uni.cityhunter.persistence.Challenge;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

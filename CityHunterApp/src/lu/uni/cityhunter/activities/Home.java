@@ -6,12 +6,12 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.persitence.Challenge;
-import lu.uni.cityhunter.persitence.ChallengeType;
-import lu.uni.cityhunter.persitence.City;
-import lu.uni.cityhunter.persitence.CompassChallenge;
-import lu.uni.cityhunter.persitence.Mystery;
-import lu.uni.cityhunter.persitence.QuestionChallenge;
+import lu.uni.cityhunter.persistence.Challenge;
+import lu.uni.cityhunter.persistence.ChallengeType;
+import lu.uni.cityhunter.persistence.City;
+import lu.uni.cityhunter.persistence.CompassChallenge;
+import lu.uni.cityhunter.persistence.Mystery;
+import lu.uni.cityhunter.persistence.QuestionChallenge;
 
 import org.json.JSONArray;
 import org.json.JSONException;

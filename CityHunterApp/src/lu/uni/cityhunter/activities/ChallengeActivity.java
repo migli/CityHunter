@@ -1,8 +1,8 @@
 package lu.uni.cityhunter.activities;
 
 import lu.uni.cityhunter.R;
-import lu.uni.cityhunter.persitence.Challenge;
-import lu.uni.cityhunter.persitence.ChallengeState;
+import lu.uni.cityhunter.persistence.Challenge;
+import lu.uni.cityhunter.persistence.ChallengeState;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;

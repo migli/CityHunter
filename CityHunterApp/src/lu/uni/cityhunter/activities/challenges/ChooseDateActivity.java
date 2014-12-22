@@ -4,7 +4,7 @@ import java.util.Random;
 
 import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.activities.ChallengeActivity;
-import lu.uni.cityhunter.persitence.QuestionChallenge;
+import lu.uni.cityhunter.persistence.QuestionChallenge;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;

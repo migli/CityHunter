@@ -2,7 +2,7 @@ package lu.uni.cityhunter.activities.challenges;
 
 import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.activities.ChallengeActivity;
-import lu.uni.cityhunter.persitence.QuestionChallenge;
+import lu.uni.cityhunter.persistence.QuestionChallenge;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;

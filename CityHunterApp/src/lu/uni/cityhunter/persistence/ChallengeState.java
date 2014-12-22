@@ -1,4 +1,4 @@
-package lu.uni.cityhunter.persitence;
+package lu.uni.cityhunter.persistence;
 
 import android.os.Parcel;
 import android.os.Parcelable;
