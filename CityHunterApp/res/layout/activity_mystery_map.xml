@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#CCCCCC"
     tools:context="lu.uni.cityhunter.activities.MysteryMapActivity" >
 
     <LinearLayout
@@ -24,14 +25,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/mapLinearLayout"
-        android:background="#848482"
+		android:layout_marginTop="1dp"
         android:orientation="vertical" >
 
         <ListView
             android:id="@+id/challengeListView"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_marginTop="1dp" >
+            android:dividerHeight="-1px" >
         </ListView>
     </LinearLayout>
 
@@ -40,10 +41,25 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/fullscreen_icon"
+        android:scaleType="fitXY"
         android:contentDescription="Fullscreen"
         android:onClick="toggleFullscreenMap" />
+    
+    <ImageButton
+        android:id="@+id/mapNextRouteButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+		android:layout_toLeftOf="@+id/mapFullScreenButton"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/next_route_icon"
+        android:scaleType="fitXY"
+        android:contentDescription="Next Route"
+        android:onClick="routeToNextChallenge" />
 
 </RelativeLayout>

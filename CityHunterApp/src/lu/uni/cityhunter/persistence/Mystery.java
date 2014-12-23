@@ -11,14 +11,16 @@ public class Mystery implements Parcelable {
 	private String question;
 	private String answer;
 	private ArrayList<Challenge> challenges;
+	private String hint;
 
 	public final static String MYSTERY_PAR_KEY = "lu.uni.mystery.par";
 	
-	public Mystery(String title, String question, String answer, ArrayList<Challenge> challenges) {
+	public Mystery(String title, String question, String answer, ArrayList<Challenge> challenges, String hint) {
 		this.title = title;
 		this.question = question;
 		this.answer = answer;
 		this.challenges = challenges;
+		this.hint = hint;
 	}
 	
 	public void setTitle(String title) {
@@ -45,6 +47,14 @@ public class Mystery implements Parcelable {
 		return this.answer;
 	}
 	
+	public String getHint() {
+		return hint;
+	}
+
+	public void setHint(String hint) {
+		this.hint = hint;
+	}
+	
 	public void setChallenge(Challenge challenge) {
 		this.challenges.add(challenge);
 	}
@@ -64,7 +74,7 @@ public class Mystery implements Parcelable {
 	@SuppressWarnings("unchecked")
 	public static final Parcelable.Creator<Mystery> CREATOR = new Creator<Mystery>() {  
 		  public Mystery createFromParcel(Parcel source) {  
-		      Mystery mistery = new Mystery(source.readString(), source.readString(), source.readString(), source.readArrayList(Challenge.class.getClassLoader()));
+		      Mystery mistery = new Mystery(source.readString(), source.readString(), source.readString(), source.readArrayList(Challenge.class.getClassLoader()),  source.readString());
 		      return mistery;  
 		  }  
 		  public Mystery[] newArray(int size) {  
@@ -83,6 +93,7 @@ public class Mystery implements Parcelable {
 		dest.writeString(this.question); 
 		dest.writeString(this.answer); 
 		dest.writeList(this.challenges);
+		dest.writeString(this.hint);
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.persistence.Challenge;
+import lu.uni.cityhunter.persistence.ChallengeState;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,18 +44,32 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		Challenge c = this.challenges.get(position);
-		if(v == null){
-			if(false){ // location in radius or playing
-				v = inflater.inflate(R.layout.list_row, null);
-			}else{
-				v = inflater.inflate(R.layout.list_row_inactive, null);
+		ChallengeState state = c.getState();
+//		Log.e("UNI.LU", "State for '"+c.getTitle()+"': "+c.getState());
+		if(state == ChallengeState.ACTIVE || state == ChallengeState.PLAYING
+				|| state == ChallengeState.SUCCESS){
+			v = inflater.inflate(R.layout.list_row, null);
+		}else{ // if state == ChallengeState.LOST || state == null
+			v = inflater.inflate(R.layout.list_row_inactive, null);
+			if(state == ChallengeState.LOST){
+				ImageView routeIcon = (ImageView) v.findViewById(R.id.routeButton);
+				routeIcon.setVisibility(View.INVISIBLE);
 			}
 		}
 		TextView title = (TextView) v.findViewById(R.id.listChallengeTitle);
 		TextView description = (TextView) v.findViewById(R.id.listChallengeDescription);
 		ImageView picture = (ImageView) v.findViewById(R.id.listChallengePicture);
+		ImageView statusPicture = (ImageView) v.findViewById(R.id.listRightArrow);
 		
-		String descriptionStr = c.getDescription();
+		String descriptionStr = "";
+		// If the Challenge was already done successfully => display the hint
+		// instead of the description!
+		if(state == ChallengeState.SUCCESS){
+			descriptionStr = c.getHint();
+		}else{
+			descriptionStr = c.getDescription();
+		}
+		
 		// Flag to check whether the description has been shortened or not
 		// This is needed to know whether to add "..." or not.
 		boolean hasBeenStripped = false;
@@ -85,6 +100,15 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 		title.setText(c.getTitle());
 		description.setText(descriptionStr);
 		picture.setImageResource(c.getCoverPicture());
+		
+		// If challenge was successfully replace right arrow by check mark
+		// If challenge was lost replace it by cross mark
+		if(state == ChallengeState.SUCCESS){
+			statusPicture.setImageResource(R.drawable.challenge_success_icon);
+		}else if(state == ChallengeState.LOST){
+			statusPicture.setImageResource(R.drawable.challenge_lost_icon);
+		}
+		
 		return v;
 	}
 	
