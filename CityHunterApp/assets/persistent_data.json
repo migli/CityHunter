@@ -2,8 +2,8 @@
     {
     	"name" : "Luxembourg", 
     	"description" : "Luxembourg City lies at the heart of Western Europe, situated 213 km (132 mi) by road from Brussels, 372 km (231 mi) from Paris, 209 km (130 mi) from Cologne.",
-    	"previewPicture" : "7f020083", 
-    	"coverPicture" : "7f020082",
+    	"previewPicture" : "7f020085", 
+    	"coverPicture" : "7f020084",
     	"location" : 
     	{
     		"latitude" : 49.611498,
@@ -19,7 +19,7 @@
 	    				"challengeType" : "CHOOSE_DATE",
 	    				"title" : "G\u00eblle Fra",
 						"description" : "The G\u00eblle Fra (Golden Lady) is a war memorial dedicated to the volunteers of WWI. The Nazis dismantled the memorial in 1940 and it remained unaccounted until 1980.\n\nIn which year did Grand Duke Jean unveil the memorial back to the public?",
-						"coverPicture" : "7f020078",
+						"coverPicture" : "7f02007a",
 						"location" : 
 						{
 							"latitude" : 49.609350,
@@ -42,7 +42,7 @@
 							"longitude" : 6.131161
 						},
 						"maxNrOfTries" : 2,
-						"possibleAnswers" : ["7f02007f", "7f020085", "7f02005a"],
+						"possibleAnswers" : ["7f020081", "7f020088", "7f02005c"],
 						"possibleAnswerDescriptions" : ["John the Blind", "Marie Anne of Portugal", "Charlotte, Grand Duchess of Luxembourg"],
 						"answer" : "7f020057", 
 						"answerDescription" : "Adolphe, Grand Duke of Luxembourg"
@@ -51,7 +51,7 @@
 	    				"challengeType" : "GUESS_NAME",
 	    				"title" : "Place Guillaume II",
 						"description" : "How do locals call this place?",
-						"coverPicture" : "7f02008a",
+						"coverPicture" : "7f02008e",
 						"location" : 
 						{
 							"latitude" : 49.610833,
@@ -67,23 +67,23 @@
 	    				"challengeType" : "CHOOSE_PICTURE",
 	    				"title" : "Grand Ducal Palace",
 						"description" : "Which one of these guards is a guard of the Grand Ducal Palace?",
-						"coverPicture" : "7f020087",
+						"coverPicture" : "7f02008b",
 						"location" : 
 						{
 							"latitude" : 49.610817,
 							"longitude" : 6.132635
 						},
 						"maxNrOfTries" : 2,
-						"possibleAnswers" : ["7f020058", "7f02008d", "7f02008e"],
+						"possibleAnswers" : ["7f020092", "7f020093", "7f020058"],
 						"possibleAnswerDescriptions" : ["", "", ""], 
-						"answer" : "7f020084",
+						"answer" : "7f020086",
 						"answerDescription" : ""
 	    			},
 	    			{
 	    				"challengeType" : "FIND_DIRECTION",
 	    				"title" : "Place de Clairefontaine",
 						"description" : "Turn your device in the direction that Grand Duchess Charlotte is pointing at and maintain this direction for 30 seconds.",
-						"coverPicture" : "7f020089",
+						"coverPicture" : "7f02008d",
 						"location" : 
 						{
 							"latitude" : 49.609849,
@@ -93,7 +93,8 @@
 						"direction" : 110,
 						"time" : 30
 	    			}
-	    		]
+	    		],
+	    		"hint" : "7 times 6"
 	    	}
     	]
     },
@@ -101,7 +102,7 @@
     	"name" : "Paris", 
     	"description" : "Paris is the capital and most populous city of France. Situated on the Seine River, in the north of the country, it is at the heart of the \u00cele-de-France region, also known as the r\u00e9gion parisienne.",
     	"previewPicture" : "0", 
-    	"coverPicture" : "7f020088",
+    	"coverPicture" : "7f02008c",
     	"location" : 
     	{
     		"latitude" : 48.8567,
@@ -115,7 +116,7 @@
     	"name" : "Lisbon", 
     	"description" : "Lisbon is the capital and the largest city of Portugal. It is the westernmost large city located in continental Europe, as well as its westernmost capital city and the only one along the Atlantic coast.",
     	"previewPicture" : "0", 
-    	"coverPicture" : "7f020080",
+    	"coverPicture" : "7f020082",
     	"location" : 
     	{
     		"latitude" : 38.713811,
@@ -129,7 +130,7 @@
     	"name" : "Dublin", 
     	"description" : "Dublin is the capital and largest city of Ireland. Dublin is in the province of Leinster on Ireland's east coast, at the mouth of the River Liffey.",
     	"previewPicture" : "0", 
-    	"coverPicture" : "7f020076",
+    	"coverPicture" : "7f020078",
     	"location" : 
     	{
     		"latitude" : 53.347778,

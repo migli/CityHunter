@@ -1,46 +1,41 @@
 package lu.uni.cityhunter.activities;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.persistence.Challenge;
+import lu.uni.cityhunter.persistence.ChallengeState;
+import lu.uni.cityhunter.persistence.Mystery;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class MysteryInfoActivity extends Activity{
 	
-	private Mystery mistery;
-	
-	private ArrayAdapter<String> hintsListViewAdapter;
-	private ListView hintsListView;
+	private Mystery mystery;
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_mistery_info);
-		mistery = (Mystery) getIntent().getParcelableExtra(Mistery.MISTERY_PAR_KEY);
+		setContentView(R.layout.activity_mystery_info);
+		mystery = (Mystery) getIntent().getParcelableExtra(Mystery.MYSTERY_PAR_KEY);
 		
 		TextView title = (TextView) findViewById(R.id.mysteryInfo_title);
-		title.setText(mistery.getTitle());
+		title.setText(mystery.getTitle());
 		
 		TextView description = (TextView) findViewById(R.id.mysteryInfo_description);
-		description.setText(mistery.getQuestion());
+		description.setText(mystery.getQuestion());
 		
-		hintsListView = (ListView) findViewById(R.id.mysteryInfo_HintsListView);
-		ArrayList<String> hintsArray = this.fetchHints();
-		hintsListViewAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, hintsArray);
-		hintsListView.setAdapter(hintsListViewAdapter);
+		displayHint();
 		
 		final EditText answer = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);
 		answer.setOnEditorActionListener(new OnEditorActionListener() {
@@ -62,28 +57,29 @@ public class MysteryInfoActivity extends Activity{
 		});
 	}
 	
-	private ArrayList<String> fetchHints(){
-		ArrayList<String> hintsArray = new ArrayList<String>();
-		Iterator<Challenge> iter = mistery.getChallenges().iterator();
+	private void displayHint(){
+		boolean displayHint = true;
+		Iterator<Challenge> iter = mystery.getChallenges().iterator();
 		while(iter.hasNext()){
 			Challenge c = iter.next();
-			if(c.getState() == ChallengeState.SUCCESS){
-				hintsArray.add(c.getHint());
+			if(this.getChallengeState(c) != ChallengeState.SUCCESS){
+				displayHint = false;
+				break;
 			}
 		}
-		if(hintsArray.isEmpty()){
-			hintsArray.add("No hints available!\nSolve some challenges to gather new hints!");
-		}
 		
-		return hintsArray;
+		TextView hint = (TextView) findViewById(R.id.mysteryInfo_Hint);
+		if(displayHint){
+			hint.setText(mystery.getHint());
+		}else{
+			hint.setText("You did not solve all challenges! No hint for you!");
+		}
 	}
 	
 	@Override
 	public void onResume(){
 		super.onResume();
-		hintsListViewAdapter.clear();
-		hintsListViewAdapter.addAll(this.fetchHints());
-		hintsListViewAdapter.notifyDataSetChanged();
+		displayHint();
 	}
 	
 	@Override
@@ -94,6 +90,27 @@ public class MysteryInfoActivity extends Activity{
     	      Context.INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
 		super.onPause();
+	}
+	
+	private ChallengeState getChallengeState(Challenge challenge){
+		SharedPreferences sharedPreferences = null;
+		if (challenge.getTitle().equals("G\u00eblle Fra")) {
+			sharedPreferences =  getSharedPreferences(ChallengeActivity.GELLE_FRA_PREFERENCES, Activity.MODE_PRIVATE);
+		} else 
+		if (challenge.getTitle().equals("Notre-Dame Cathedral")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.CATHEDRAL_PREFERENCES, Activity.MODE_PRIVATE);
+		} else 
+		if (challenge.getTitle().equals("Grand Ducal Palace")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.PALAIS_PREFERENCES, Activity.MODE_PRIVATE);
+		} else
+		if (challenge.getTitle().equals("Place Guillaume II")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.PLACE_GUILLAUME_PREFERENCES, Activity.MODE_PRIVATE);
+		} else
+		if (challenge.getTitle().equals("Place de Clairefontaine")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.PLACE_CLAIREFONTAINE_PREFERENCES, Activity.MODE_PRIVATE);
+		}
+		ChallengeState challengeState = ChallengeState.values()[sharedPreferences.getInt("challengeState", ChallengeState.PLAYING.ordinal())];
+		return challengeState;
 	}
 	
 }

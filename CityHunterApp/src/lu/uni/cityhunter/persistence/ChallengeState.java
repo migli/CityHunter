@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public enum ChallengeState implements Parcelable {
 
-	SUCCESS, PLAYING, LOST, ACTIVE;
+	SUCCESS, PLAYING, LOST, ACTIVE, INACTIVE;
 	
 	public static final Parcelable.Creator<ChallengeState> CREATOR = new Creator<ChallengeState>() {  
 		  public ChallengeState createFromParcel(Parcel source) {  

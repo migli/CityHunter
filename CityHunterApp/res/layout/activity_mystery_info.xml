@@ -28,25 +28,25 @@
         />
 	
 	<TextView
-	    android:id="@+id/mysteryInfo_HintsLabel"
+	    android:id="@+id/mysteryInfo_HintLabel"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
 	    android:layout_below="@+id/mysteryInfo_description"
 	    android:layout_marginTop="10dp"
 	    android:textSize="8pt"
-	    android:text="Hints you already gathered:" />
+	    android:text="Hint to the mystery:" />
 
-	<ListView
-	    android:id="@+id/mysteryInfo_HintsListView"
+	<TextView
+	    android:id="@+id/mysteryInfo_Hint"
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
-	    android:layout_below="@+id/mysteryInfo_HintsLabel"
+	    android:layout_below="@+id/mysteryInfo_HintLabel"
 	    android:layout_marginTop="10dp"
 	    android:layout_marginBottom="90dp"
 	    android:background="@layout/border" >
 
-	</ListView>
+	</TextView>
 
 	<TextView
 	    android:id="@+id/mysteryInfo_solveMysteryLabel"

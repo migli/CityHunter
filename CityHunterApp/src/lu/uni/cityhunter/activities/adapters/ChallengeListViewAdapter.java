@@ -3,8 +3,12 @@ package lu.uni.cityhunter.activities.adapters;
 import java.util.ArrayList;
 
 import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.activities.ChallengeActivity;
 import lu.uni.cityhunter.persistence.Challenge;
 import lu.uni.cityhunter.persistence.ChallengeState;
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +18,8 @@ import android.widget.TextView;
 
 public class ChallengeListViewAdapter extends BaseAdapter{
 	
-	private int descriptionStringLimit;
+	private boolean isLogging = false;
+	private int descriptionStringLimit = 200;
 	
 	private ArrayList<Challenge> challenges;
 	private LayoutInflater inflater = null;
@@ -22,7 +27,6 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 	public ChallengeListViewAdapter (ArrayList<Challenge> challenges, LayoutInflater inflater){
 		this.challenges = challenges;
 		this.inflater = inflater;
-		this.descriptionStringLimit = 200;
 	}
 	
 	@Override
@@ -44,12 +48,13 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		Challenge c = this.challenges.get(position);
-		ChallengeState state = c.getState();
-//		Log.e("UNI.LU", "State for '"+c.getTitle()+"': "+c.getState());
+		ChallengeState state = this.getChallengeState(c, parent);
+		if(isLogging)
+			Log.i("ChallengeListViewAdapter", "State for '"+c.getTitle()+"': "+state);
 		if(state == ChallengeState.ACTIVE || state == ChallengeState.PLAYING
 				|| state == ChallengeState.SUCCESS){
 			v = inflater.inflate(R.layout.list_row, null);
-		}else{ // if state == ChallengeState.LOST || state == null
+		}else{ // if state == ChallengeState.LOST || state == ChallengeState.INACTIVE
 			v = inflater.inflate(R.layout.list_row_inactive, null);
 			if(state == ChallengeState.LOST){
 				ImageView routeIcon = (ImageView) v.findViewById(R.id.routeButton);
@@ -62,13 +67,7 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 		ImageView statusPicture = (ImageView) v.findViewById(R.id.listRightArrow);
 		
 		String descriptionStr = "";
-		// If the Challenge was already done successfully => display the hint
-		// instead of the description!
-		if(state == ChallengeState.SUCCESS){
-			descriptionStr = c.getHint();
-		}else{
-			descriptionStr = c.getDescription();
-		}
+		descriptionStr = c.getDescription();
 		
 		// Flag to check whether the description has been shortened or not
 		// This is needed to know whether to add "..." or not.
@@ -110,6 +109,27 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 		}
 		
 		return v;
+	}
+	
+	private ChallengeState getChallengeState(Challenge challenge, ViewGroup parent){
+		SharedPreferences sharedPreferences = null;
+		if (challenge.getTitle().equals("G\u00eblle Fra")) {
+			sharedPreferences =  parent.getContext().getSharedPreferences(ChallengeActivity.GELLE_FRA_PREFERENCES, Activity.MODE_PRIVATE);
+		} else 
+		if (challenge.getTitle().equals("Notre-Dame Cathedral")) {
+			sharedPreferences = parent.getContext().getSharedPreferences(ChallengeActivity.CATHEDRAL_PREFERENCES, Activity.MODE_PRIVATE);
+		} else 
+		if (challenge.getTitle().equals("Grand Ducal Palace")) {
+			sharedPreferences = parent.getContext().getSharedPreferences(ChallengeActivity.PALAIS_PREFERENCES, Activity.MODE_PRIVATE);
+		} else
+		if (challenge.getTitle().equals("Place Guillaume II")) {
+			sharedPreferences = parent.getContext().getSharedPreferences(ChallengeActivity.PLACE_GUILLAUME_PREFERENCES, Activity.MODE_PRIVATE);
+		} else
+		if (challenge.getTitle().equals("Place de Clairefontaine")) {
+			sharedPreferences = parent.getContext().getSharedPreferences(ChallengeActivity.PLACE_CLAIREFONTAINE_PREFERENCES, Activity.MODE_PRIVATE);
+		}
+		ChallengeState challengeState = ChallengeState.values()[sharedPreferences.getInt("challengeState", ChallengeState.INACTIVE.ordinal())];
+		return challengeState;
 	}
 	
 }

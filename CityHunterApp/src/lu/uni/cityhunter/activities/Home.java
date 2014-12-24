@@ -16,6 +16,7 @@ import lu.uni.cityhunter.persistence.QuestionChallenge;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -70,7 +71,8 @@ public class Home extends Activity implements LocationListener {
 							jsonMysteries.getJSONObject(j).getString("title"), 
 							jsonMysteries.getJSONObject(j).getString("question"), 
 							jsonMysteries.getJSONObject(j).getString("answer"), 
-							new ArrayList<Challenge>());
+							new ArrayList<Challenge>(),
+							jsonMysteries.getJSONObject(j).getString("hint"));
 					JSONArray jsonChallenges = jsonMysteries.getJSONObject(j).getJSONArray("challenges");
 					for (int k = 0; k < jsonChallenges.length(); k++) {
 						ChallengeType challengeType = ChallengeType.valueOf(jsonChallenges.getJSONObject(k).getString("challengeType"));

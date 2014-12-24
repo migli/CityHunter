@@ -1,8 +1,12 @@
 package lu.uni.cityhunter.activities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import lu.uni.cityhunter.R;
+import lu.uni.cityhunter.activities.GoogleDirection.OnDirectionResponseListener;
+import lu.uni.cityhunter.activities.adapters.ChallengeInfoWindowAdapter;
+import lu.uni.cityhunter.activities.adapters.ChallengeListViewAdapter;
 import lu.uni.cityhunter.activities.challenges.ChooseDateActivity;
 import lu.uni.cityhunter.activities.challenges.ChoosePictureActivity;
 import lu.uni.cityhunter.activities.challenges.FindDirectionActivity;
@@ -10,10 +14,6 @@ import lu.uni.cityhunter.activities.challenges.GuessNameActivity;
 import lu.uni.cityhunter.persistence.Challenge;
 import lu.uni.cityhunter.persistence.ChallengeState;
 import lu.uni.cityhunter.persistence.Mystery;
-
-import lu.uni.cityhunter.activities.GoogleDirection.OnDirectionResponseListener;
-import lu.uni.cityhunter.activities.adapters.ChallengeInfoWindowAdapter;
-import lu.uni.cityhunter.activities.adapters.ChallengeListViewAdapter;
 
 import org.w3c.dom.Document;
 
@@ -23,12 +23,12 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
-
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -42,13 +42,17 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationClient.OnAddGeofencesResultListener;
-import com.google.android.gms.location.LocationStatusCodes;
+import com.google.android.gms.location.GeofencingRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -58,8 +62,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MysteryMapActivity extends FragmentActivity implements OnClickListener, ConnectionCallbacks, 
-											OnConnectionFailedListener, OnAddGeofencesResultListener,
-											OnDirectionResponseListener, LocationListener, OnItemClickListener {
+											OnConnectionFailedListener, OnDirectionResponseListener, 
+											LocationListener, OnItemClickListener {
 
 	private final static int GOOGLE_PLAY_SERVICES_ERROR_RESOLUTION = 9999;
 	private final static float GEOFENCE_RADIUS = 50; // in meters
@@ -76,20 +80,16 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 //	static final LatLng LUXEMBOURG = new LatLng(49.626597, 6.158986);
 
 	private boolean isMapFullscreen = false;
+	private boolean geofencesAdded = false;
 
-	private LocationClient locationClient;
+	private GoogleApiClient googleApiClient;
     private PendingIntent geofenceRequestIntent;
-    public enum RequestType {ADD}
-    private RequestType requestType;
 	private ArrayList<Geofence> geofences;
-    private boolean inProgress;
 
 	private GoogleMap map;
-	private ListView list;
 	private Mystery mystery;
 	
 	protected SharedPreferences sharedPreferences;
-	private Mystery mistery;
 	private GoogleDirection directions;
 	private Polyline route;
 	private LatLng currentLocation;
@@ -109,17 +109,8 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		routeToNextChallenge = true;
 		indexOfChallenge = 0;
 		
-		mistery = (Mystery) getIntent().getParcelableExtra(Mystery.MYSTERY_PAR_KEY);
-		ArrayList<Challenge> c = mistery.getChallenges();
-		
-		// TODO: Temporarily: Set path statically for Mistery 1
-		// => Should be given by the mistery object?
-		ArrayList<LatLng> path = new ArrayList<LatLng>();
-		path.add(c.get(0).getLocation()); // Golden Lady
-		path.add(c.get(1).getLocation()); // Cathedral
-		path.add(c.get(2).getLocation()); // Place Guillaume
-		path.add(c.get(3).getLocation()); // Palace
-		path.add(c.get(4).getLocation()); // Place Cairefontaine
+		mystery = (Mystery) getIntent().getParcelableExtra(Mystery.MYSTERY_PAR_KEY);
+		ArrayList<Challenge> c = mystery.getChallenges();
 		
 		directions = new GoogleDirection(this);
 		directions.setOnDirectionResponseListener(this);
@@ -157,53 +148,8 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		
 		// Enable current location of device
 		map.setMyLocationEnabled(true);
-		
-		// ListView
-//		list.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//				Challenge challenge = (Challenge) parent.getItemAtPosition(position);
-//				if (challenge.getTitle().equals("G\u00eblle Fra")) {
-//					sharedPreferences = getSharedPreferences(ChallengeActivity.GELLE_FRA_PREFERENCES, MODE_PRIVATE);
-//				} else 
-//				if (challenge.getTitle().equals("Notre-Dame Cathedral")) {
-//					sharedPreferences = getSharedPreferences(ChallengeActivity.CATHEDRAL_PREFERENCES, MODE_PRIVATE);
-//				} else 
-//				if (challenge.getTitle().equals("Grand Ducal Palace")) {
-//					sharedPreferences = getSharedPreferences(ChallengeActivity.PALAIS_PREFERENCES, MODE_PRIVATE);
-//				} else
-//				if (challenge.getTitle().equals("Place Guillaume II")) {
-//					sharedPreferences = getSharedPreferences(ChallengeActivity.PLACE_GUILLAUME_PREFERENCES, MODE_PRIVATE);
-//				} else
-//				if (challenge.getTitle().equals("Place de Clairefontaine")) {
-//					sharedPreferences = getSharedPreferences(ChallengeActivity.PLACE_CLAIREFONTAINE_PREFERENCES, MODE_PRIVATE);
-//				}
-//				ChallengeState challengeState = ChallengeState.values()[sharedPreferences.getInt("challengeState", ChallengeState.PLAYING.ordinal())];
-//				if (challengeState.equals(ChallengeState.PLAYING)) {
-//					Intent intent;
-//					switch (challenge.getType()) {
-//						case CHOOSE_DATE:
-//							intent = new Intent(view.getContext(), ChooseDateActivity.class);
-//							break;
-//						case CHOOSE_PICTURE:
-//							intent = new Intent(view.getContext(), ChoosePictureActivity.class);
-//							break;
-//						case GUESS_NAME:
-//							intent = new Intent(view.getContext(), GuessNameActivity.class);
-//							break;
-//						case FIND_DIRECTION:
-//							intent = new Intent(view.getContext(), FindDirectionActivity.class);
-//							break;
-//						default:
-//							intent = new Intent(view.getContext(), ChallengeActivity.class);
-//							break;
-//					}
-//					Bundle bundle = new Bundle();
-//					bundle.putParcelable(Challenge.CHALLENGE_PAR_KEY, challenge);
-//					intent.putExtras(bundle);
-//					startActivity(intent);
-//				}
+	
+		//ListView
 		final ListView list = (ListView) findViewById(R.id.challengeListView);
 		final ChallengeListViewAdapter listAdapter = new ChallengeListViewAdapter(c, getLayoutInflater());
 		list.setAdapter(listAdapter);
@@ -221,7 +167,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 
 		ImageButton btn = (ImageButton) findViewById(R.id.mapFullScreenButton);
 		btn.setOnClickListener(this);
-		
+
 		// Initialize the current location manager
 		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
@@ -234,11 +180,11 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	}
 	
 	private void updateIndexOfChallenge(){
-		ArrayList<Challenge> challenges = mistery.getChallenges();
+		ArrayList<Challenge> challenges = mystery.getChallenges();
 		if(routeToNextChallenge){
 			// Take the index of the first challenge with state different from success and lost
 			for(int i = 0; i < challenges.size(); i++){
-				ChallengeState state = challenges.get(i).getState();
+				ChallengeState state = this.getChallengeState(challenges.get(i));
 				if(state != ChallengeState.LOST && state != ChallengeState.SUCCESS){
 					indexOfChallenge = i;
 					break;
@@ -247,7 +193,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		}else{ 
 			// User specified to route to a specific Challenge
 			// Check the state of the given challenge:
-			ChallengeState state = challenges.get(indexOfChallenge).getState();
+			ChallengeState state = this.getChallengeState(challenges.get(indexOfChallenge));
 			// If challenge LOST or SUCCESS => change to automatic routing mode
 			if(state == ChallengeState.LOST || state == ChallengeState.SUCCESS){
 				routeToNextChallenge = true;
@@ -259,7 +205,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	public void routeToNextChallenge(View v){
 		this.routeToNextChallenge = true;
 		this.updateIndexOfChallenge();
-		directions.request(currentLocation, mistery.getChallenge(indexOfChallenge).getLocation(), GoogleDirection.MODE_WALKING);
+		directions.request(currentLocation, mystery.getChallenge(indexOfChallenge).getLocation(), GoogleDirection.MODE_WALKING);
 	}
 	
 //	private void requestDirections(ArrayList<LatLng> path){
@@ -347,20 +293,15 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
     }
 
     public void addGeofences() {
-        requestType = RequestType.ADD;
-        
         if (!servicesConnected()) {
             return;
         }
         
-        locationClient = new LocationClient(this, this, this);
-        
-        if (!inProgress) {
-            inProgress = true;
-            locationClient.connect();
-        } else {
-            // A request is currently being progressed => do nothing
-        }
+        googleApiClient = new GoogleApiClient.Builder(this)
+        .addApi(LocationServices.API)
+        .addConnectionCallbacks(this)
+        .build();
+        googleApiClient.connect();
     }
     
     private boolean servicesConnected() {
@@ -369,7 +310,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		if (resultCode == ConnectionResult.SUCCESS) {
 			return true;
 		} else {
-			int errorCode = ConnectionResult.HE.getErrorCode();
+			int errorCode = ConnectionResult.Iu.getErrorCode();
 			Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode, this, GOOGLE_PLAY_SERVICES_ERROR_RESOLUTION);
 			
 			if (errorDialog != null) {
@@ -382,29 +323,15 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	}
 
 	@Override
-	public void onAddGeofencesResult(int statusCode, String[] geofenceRequestIds) {
-		if (LocationStatusCodes.SUCCESS == statusCode) {
-            // it worked => Yeah!
-			Toast.makeText(this, "Successfully added geofences!", Toast.LENGTH_SHORT).show();
-        } else {
-        	Toast.makeText(this, "Adding Geofences failed!", Toast.LENGTH_SHORT).show();
-        }
-
-        inProgress = false;
-        locationClient.disconnect();
-	}
-
-	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-        inProgress = false;
-        if(ConnectionResult.HE.hasResolution()) {
+        if(result.hasResolution()) {
             try {
-                ConnectionResult.HE.startResolutionForResult( this, GOOGLE_PLAY_SERVICES_ERROR_RESOLUTION);
+                result.startResolutionForResult(this, GOOGLE_PLAY_SERVICES_ERROR_RESOLUTION);
             } catch (SendIntentException e) {
                 e.printStackTrace();
             }
         } else {
-            int errorCode = ConnectionResult.HE.getErrorCode();
+            int errorCode = result.getErrorCode();
             Dialog errorDialog = GooglePlayServicesUtil.getErrorDialog(errorCode, this, GOOGLE_PLAY_SERVICES_ERROR_RESOLUTION);
             if (errorDialog != null) {
                 ErrorDialogFragment errorFragment = new ErrorDialogFragment();
@@ -415,20 +342,32 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	}
 
 	@Override
-	public void onConnected(Bundle connectionHint) {
-		switch (requestType) {
-		case ADD :
-			geofenceRequestIntent = getTransitionPendingIntent();
-			locationClient.addGeofences(geofences, geofenceRequestIntent, this);
-		}
-
-	}
-
-	@Override
-	public void onDisconnected() {
-		inProgress = false;
-		locationClient = null;
-		Toast.makeText(this, "Geofences disconnection!", Toast.LENGTH_SHORT).show();
+	public void onConnected(Bundle bundle) {
+		geofenceRequestIntent = getTransitionPendingIntent();
+		GeofencingRequest request = new GeofencingRequest.Builder().addGeofences(geofences).build();
+		PendingResult<Status> result = LocationServices.GeofencingApi.addGeofences(googleApiClient, request, geofenceRequestIntent);
+		result.setResultCallback(new ResultCallback<Status>() {
+	        @Override
+	        public void onResult(Status status) {
+	            if (status.isSuccess()) {
+	                // Successfully registered
+	                if(isLogging)
+	                	Log.i("onConnected", "Successfully added Geofences!");
+	                geofencesAdded = true;
+	            } else if (status.hasResolution()) {
+	                // Google provides a way to fix the issue
+	                /*
+	                status.startResolutionForResult(
+	                        mContext,     // your current activity used to receive the result
+	                        RESULT_CODE); // the result code you'll look for in your
+	                // onActivityResult method to retry registering
+	                */
+	            } else {
+	                // No recovery.
+	                Log.e("onConnected", "Registering failed: " + status.getStatusMessage());
+	            }
+	        }
+	    });
 	}
 	
 	@Override
@@ -455,7 +394,9 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 			Log.i("MysteryMapActivity", "Location changed!");
 		updateIndexOfChallenge();
 		currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-		LatLng end = mistery.getChallenges().get(indexOfChallenge).getLocation();
+		if(!geofencesAdded)
+			checkDistancesToChallenges();
+		LatLng end = mystery.getChallenges().get(indexOfChallenge).getLocation();
 		// Request the directions:
 		directions.request(currentLocation, end, GoogleDirection.MODE_WALKING);
 	}
@@ -482,23 +423,94 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		Challenge challenge = (Challenge) parent.getItemAtPosition(position);
-		if(challenge.getState() == ChallengeState.ACTIVE){
-			Intent intent = new Intent(view.getContext(), ChallengeActivity.class);
+		ChallengeState state = this.getChallengeState(challenge);
+		if(isLogging)
+			Log.i("MysteryMapActivity", "Challenge '"+challenge.getTitle()+"' in state '"+state+"'!");
+		if(state == ChallengeState.ACTIVE || state == ChallengeState.PLAYING){
+			Intent intent;
+			switch (challenge.getType()) {
+				case CHOOSE_DATE:
+					intent = new Intent(view.getContext(), ChooseDateActivity.class);
+					break;
+				case CHOOSE_PICTURE:
+					intent = new Intent(view.getContext(), ChoosePictureActivity.class);
+					break;
+				case GUESS_NAME:
+					intent = new Intent(view.getContext(), GuessNameActivity.class);
+					break;
+				case FIND_DIRECTION:
+					intent = new Intent(view.getContext(), FindDirectionActivity.class);
+					break;
+				default:
+					intent = new Intent(view.getContext(), ChallengeActivity.class);
+					break;
+			}
 			Bundle bundle = new Bundle();
 			bundle.putParcelable(Challenge.CHALLENGE_PAR_KEY, (Parcelable) challenge);
 			intent.putExtras(bundle);
 			startActivity(intent);
-		}else if(challenge.getState() == null){
-//			Toast.makeText(view.getContext(), "You need to be in proximity of '"+challenge.getTitle()+"' in order to start the challenge!", Toast.LENGTH_SHORT).show();
-			indexOfChallenge = mistery.getChallenges().indexOf(challenge);
+		}else if(state == ChallengeState.INACTIVE){
+			indexOfChallenge = mystery.getChallenges().indexOf(challenge);
 			routeToNextChallenge = false;
-			directions.request(currentLocation, mistery.getChallenge(indexOfChallenge).getLocation(), GoogleDirection.MODE_WALKING);
-		}else if(challenge.getState() == ChallengeState.SUCCESS){
+			directions.request(currentLocation, mystery.getChallenge(indexOfChallenge).getLocation(), GoogleDirection.MODE_WALKING);
+		}else if(state == ChallengeState.SUCCESS){
 			Toast.makeText(view.getContext(), "You already solved this challenge!", Toast.LENGTH_SHORT).show();
-		}else if(challenge.getState() == ChallengeState.LOST){
+		}else if(state == ChallengeState.LOST){
 			Toast.makeText(view.getContext(), "Sorry, but you cannot try again!", Toast.LENGTH_SHORT).show();
 		}
 		
+	}
+	
+	private ChallengeState getChallengeState(Challenge challenge){
+		SharedPreferences sharedPreferences = null;
+		if (challenge.getTitle().equals("G\u00eblle Fra")) {
+			sharedPreferences =  getSharedPreferences(ChallengeActivity.GELLE_FRA_PREFERENCES, Activity.MODE_PRIVATE);
+		} else 
+		if (challenge.getTitle().equals("Notre-Dame Cathedral")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.CATHEDRAL_PREFERENCES, Activity.MODE_PRIVATE);
+		} else 
+		if (challenge.getTitle().equals("Grand Ducal Palace")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.PALAIS_PREFERENCES, Activity.MODE_PRIVATE);
+		} else
+		if (challenge.getTitle().equals("Place Guillaume II")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.PLACE_GUILLAUME_PREFERENCES, Activity.MODE_PRIVATE);
+		} else
+		if (challenge.getTitle().equals("Place de Clairefontaine")) {
+			sharedPreferences = getSharedPreferences(ChallengeActivity.PLACE_CLAIREFONTAINE_PREFERENCES, Activity.MODE_PRIVATE);
+		}
+		ChallengeState challengeState = ChallengeState.values()[sharedPreferences.getInt("challengeState", ChallengeState.INACTIVE.ordinal())];
+		
+		return challengeState;
+	}
+	
+	private void checkDistancesToChallenges(){
+		if(currentLocation != null){
+			ArrayList<Challenge> challenges = mystery.getChallenges();
+			Iterator<Challenge> iter = challenges.iterator();
+			while(iter.hasNext()){
+				Challenge c = iter.next();
+				float[] distance = new float[1];
+				Location.distanceBetween(currentLocation.latitude, currentLocation.longitude, 
+						c.getLocation().latitude, c.getLocation().longitude, distance);
+				if(distance[0] <= GEOFENCE_RADIUS){
+					ChallengeState state = this.getChallengeState(c);
+					if(state == ChallengeState.INACTIVE){
+						// Change Challenge state to ACTIVE
+						SharedPreferences.Editor editor = sharedPreferences.edit();
+						editor.putInt("challengeState", ChallengeState.ACTIVE.ordinal());
+						editor.commit();
+					}
+				}
+			}
+		}else{
+			if(isLogging)
+				Log.e("MysteryMapActivity", "Current location is null in 'checkDistancesToChallenges'!");
+		}
+	}
+
+	@Override
+	public void onConnectionSuspended(int cause) {
+		// nothing
 	}
 
 }
