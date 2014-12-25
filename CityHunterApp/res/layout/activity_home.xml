@@ -64,9 +64,11 @@
         android:id="@+id/imageViewCurrentCityPreview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewSlogan"
+        android:layout_below="@+id/textViewScore"
+        android:layout_above="@+id/currentCity"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp" />
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="40dp" />
 
     <TextView
         android:id="@+id/textViewScore"

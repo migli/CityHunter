@@ -7,8 +7,10 @@ import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.persistence.Challenge;
 import lu.uni.cityhunter.persistence.City;
 import lu.uni.cityhunter.persistence.Mystery;
+import lu.uni.cityhunter.persistence.MysteryState;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class CityActivity extends Activity {
 
@@ -58,11 +61,17 @@ public class CityActivity extends Activity {
 		        verticalLayout.setClickable(true);
 		        verticalLayout.setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						Intent intent = new Intent(CityActivity.this, MysteryTabActivity.class);
-						Bundle bundle = new Bundle();  
-				        bundle.putParcelable(Mystery.MYSTERY_PAR_KEY, mystery);  
-				        intent.putExtras(bundle);
-				        startActivity(intent);
+						SharedPreferences sharedPreferences = getSharedPreferences(MysteryInfoActivity.MYSTERY_1_PREFERENCES, MODE_PRIVATE);
+						MysteryState state = MysteryState.values()[sharedPreferences.getInt("mysteryState", MysteryState.PLAYING.ordinal())];
+						if (!state.equals(MysteryState.SUCCESS)) {
+							Intent intent = new Intent(CityActivity.this, MysteryTabActivity.class);
+							Bundle bundle = new Bundle();  
+					        bundle.putParcelable(Mystery.MYSTERY_PAR_KEY, mystery);  
+					        intent.putExtras(bundle);
+					        startActivity(intent);
+						} else {
+							Toast.makeText(view.getContext(), "You already solved this mystery!", Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 		        verticalLayout.setLayoutParams(new LayoutParams((displaymetrics.widthPixels - 36 * 3) / 2, displaymetrics.heightPixels / 2 - 2 * 36));

@@ -86,6 +86,12 @@ public class SettingsActivity extends Activity {
 				editor.remove("challengeState");
 				editor.remove("nrOfTries");
 		        editor.commit();
+		        // Remove Mystery 1 
+		        sharedPreferences = getSharedPreferences(MysteryInfoActivity.MYSTERY_1_PREFERENCES, MODE_PRIVATE);
+				editor = sharedPreferences.edit();
+				editor.remove("mysteryState");
+				editor.remove("nrOfTries");
+		        editor.commit();
 		        // Delete score
 		        sharedPreferences = getSharedPreferences(Home.SCORE_PREFERENCES, MODE_PRIVATE);
 				editor = sharedPreferences.edit();

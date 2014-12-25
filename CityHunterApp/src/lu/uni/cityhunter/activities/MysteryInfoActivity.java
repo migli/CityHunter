@@ -6,6 +6,7 @@ import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.persistence.Challenge;
 import lu.uni.cityhunter.persistence.ChallengeState;
 import lu.uni.cityhunter.persistence.Mystery;
+import lu.uni.cityhunter.persistence.MysteryState;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -21,7 +22,13 @@ import android.widget.Toast;
 public class MysteryInfoActivity extends Activity{
 	
 	private Mystery mystery;
+	private MysteryState mysteryState;
+	private int nrOfTries;
+	private int score;
+	private SharedPreferences sharedPreferences;
+	private SharedPreferences scoreSharedPreferences;
 	
+	public static final String MYSTERY_1_PREFERENCES = "uni.lu.cityhunter.mystery_1";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +44,32 @@ public class MysteryInfoActivity extends Activity{
 		
 		displayHint();
 		
+		sharedPreferences = getSharedPreferences(MYSTERY_1_PREFERENCES, MODE_PRIVATE);
+		mysteryState = MysteryState.values()[sharedPreferences.getInt("mysteryState", MysteryState.PLAYING.ordinal())];
+		nrOfTries = sharedPreferences.getInt("nrOfTries", 0);
+		scoreSharedPreferences = getSharedPreferences(Home.SCORE_PREFERENCES, MODE_PRIVATE);
+		score = scoreSharedPreferences.getInt("score", 0);
+		
 		final EditText answer = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);
 		answer.setOnEditorActionListener(new OnEditorActionListener() {
 		    @Override
 		    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		        if (actionId == EditorInfo.IME_ACTION_DONE) {
-		            // Check if answer right
-		        	String answerStr = answer.getText().toString();
-		        	Toast.makeText(getParent(), "Your answer is: '"+answerStr+"'", Toast.LENGTH_SHORT).show();
-		        	
-		        	// Hide Software Keyboard
+		    	if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+			        // Check if answer is right or wrong
+		    		if (answer.getText().toString().equals(mystery.getAnswer())) {
+		    			mysteryState = MysteryState.SUCCESS;
+		    			score += 500 - nrOfTries * 100;
+		    			Toast.makeText(getParent(), "Your answer is right!", Toast.LENGTH_SHORT).show();	
+		    			finish();
+		    		} else {
+		    			if (nrOfTries < 4) {
+		    				nrOfTries++;
+		    			}
+		    			Toast.makeText(getParent(), "Your answer is wrong!", Toast.LENGTH_SHORT).show();	
+		    		}
+		    		// Hide Software Keyboard
 		        	EditText myEditText = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);  
-		        	InputMethodManager imm = (InputMethodManager)getSystemService(
-		        	      Context.INPUT_METHOD_SERVICE);
+		        	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		        	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
 		        }
 		        return true;
@@ -84,12 +104,18 @@ public class MysteryInfoActivity extends Activity{
 	
 	@Override
 	public void onPause(){
+		super.onPause();
+		SharedPreferences.Editor editor = sharedPreferences.edit();
+		editor.putInt("mysteryState", mysteryState.ordinal());
+		editor.putInt("nrOfTries", nrOfTries);
+		editor.commit();
+		editor = scoreSharedPreferences.edit();
+		editor.putInt("score", score);
+		editor.commit();
 		// Hide Software keyboard
 		EditText myEditText = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);  
-    	InputMethodManager imm = (InputMethodManager)getSystemService(
-    	      Context.INPUT_METHOD_SERVICE);
-    	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
-		super.onPause();
+    	InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);		
 	}
 	
 	private ChallengeState getChallengeState(Challenge challenge){
