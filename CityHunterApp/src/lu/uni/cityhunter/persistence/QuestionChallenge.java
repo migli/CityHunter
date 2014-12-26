@@ -20,7 +20,7 @@ public class QuestionChallenge extends Challenge {
 		this.answerDescription = answerDescription;
 	}
 	
-	public void possibleAnswers(String[] possibleAnswers) {
+	public void setPossibleAnswers(String[] possibleAnswers) {
 		this.possibleAnswers = possibleAnswers;
 	}
 	

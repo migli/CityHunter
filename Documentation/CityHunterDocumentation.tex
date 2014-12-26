@@ -21,6 +21,11 @@
 
 \counterwithout{figure}{chapter}
 
+\pagestyle{fancy}
+\lhead[\fancyplain{}{\sffamily \thepage}]{\fancyplain{}{\bf \rightmark}}
+\rhead[\fancyplain{}{\bf \leftmark}]{\fancyplain{}{\sffamily \thepage}}
+\rfoot[]{\fancyplain{\sffamily \thepage}{}}
+
 \graphicspath{{Figures/}}	
 
 \renewcommand*\contentsname{Table of Contents}

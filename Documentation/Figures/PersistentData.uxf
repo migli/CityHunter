@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.0">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>300</x>
+      <y>60</y>
+      <w>230</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Home
+--
+- cities: ArrayList&lt;City&gt;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>760</x>
+      <y>0</y>
+      <w>310</w>
+      <h>370</h>
+    </coordinates>
+    <panel_attributes>City
+--
+- name: String
+- description: String
+- previewPicture: Int
+- coverPicture: Int
+- location: LatLng
+- mysteries: ArrayList&lt;Mystery&gt;
+--
++ setName(String name): void
++ getName(): String
++ setDescription(String description): void
++ getDescription(): String
++ setPreviewPicture(Int previewPicture): void
++ getPreviewPicture(): Int
++ setCoverPicture(Int coverPicture): void
++ getCoverPicture(): Int
++ setLocation(LatLng location): void
++ getLocation(): LatLng
++ setMystery(Mystery mystery): void
++ getMystery(Int index): Mystery
++ removeMystery(Mystery mystery): void
++ getMysteries(): ArrayList&lt;Mystery&gt;
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>70</y>
+      <w>260</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1..1
+cities &gt;</panel_attributes>
+    <additional_attributes>240.0;20.0;10.0;20.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>750</x>
+      <y>480</y>
+      <w>330</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>Mystery
+--
+- title: String
+- question: String
+- answer: String
+- hint: String
+- challenges: ArrayList&lt;Challenge&gt;
+--
++ setTitle(String title): void
++ getTitle(): String
++ setQuestion(String question): void
++ getQuestion(): String
++ setAnswer(String answer): void
++ getAnswer(): String
++ setHint(String hint): void
++ getHint(): String
++ setChallenge(Challenge challenge): void
++ getChallenge(Int index): Challenge
++ removeChallenge(Challenge challenge): void
++ getChallenges(): ArrayList&lt;Challenge&gt;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>870</x>
+      <y>360</y>
+      <w>90</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1..1
+mysteries &gt;</panel_attributes>
+    <additional_attributes>40.0;120.0;40.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>260</x>
+      <y>220</y>
+      <w>310</w>
+      <h>330</h>
+    </coordinates>
+    <panel_attributes>/Challenge/
+--
+- title: String
+- description: String
+- coverPicture: Int
+- location: LatLng
+- maxNrOfTries: Int
+- type: ChallengeType
+--
++ setTitle(String title): void
++ getTitle(): String
++ setDescription(String description): void
++ getDescription(): String
++ setCoverPicture(Int coverPicture): void
++ getCoverPicture(): Int
++ setLocation(LatLng location): void
++ getLocation(): LatLng
++ setMaxNrOfTries(Int maxNtOfTries): void
++ getMaxNrOfTries(): Int
++ setType(ChallengeType type): void
++ getType(): ChallengeType
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>360</y>
+      <w>210</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>lt=-
+m1=0..*
+m2=1..1
+challenges &gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;100.0;10.0;100.0;250.0;190.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>90</x>
+      <y>700</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>QuestionChallenge
+--
+- possibleAnswers: String[]
+- possibleAnswerDescriptions: String[]
+- answer: String
+- answerDescription: String
+--
++ setPossibleAnswers(String[] possibleAnswers): void
++ getPossibleAnswers(): String[]
++ setPossibleAnswerDescriptions(String[] possibleAnswerDescriptions): void
++ getPossibleAnswerDescriptions(): String[]
++ setAnswer(String answer): void
++ getAnswer(): String
++ setAnswerDescription(String answerDescription): void
++ getAnswerDescription(): String
+-- </panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>180</x>
+      <y>540</y>
+      <w>240</w>
+      <h>180</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;160.0;10.0;120.0;220.0;120.0;220.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>1060</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>CompassChallenge
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>390</x>
+      <y>540</y>
+      <w>600</w>
+      <h>990</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>500.0;520.0;580.0;970.0;420.0;970.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
