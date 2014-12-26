@@ -7,6 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="horizontal"
+    android:background="#F5F5F5"
     tools:context="lu.uni.cityhunter.activities.HelpActivity" >
 
     <ScrollView

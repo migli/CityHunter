@@ -426,6 +426,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		ChallengeState state = this.getChallengeState(challenge);
 		if(isLogging)
 			Log.i("MysteryMapActivity", "Challenge '"+challenge.getTitle()+"' in state '"+state+"'!");
+		state = ChallengeState.ACTIVE;
 		if(state == ChallengeState.ACTIVE || state == ChallengeState.PLAYING){
 			Intent intent;
 			switch (challenge.getType()) {

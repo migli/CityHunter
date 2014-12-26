@@ -19,11 +19,22 @@
 \usepackage{chngcntr}
 \usepackage{pdfpages}
 
+\counterwithout{figure}{chapter}
+
 \graphicspath{{Figures/}}	
 
+\renewcommand*\contentsname{Table of Contents}
+
 \begin{document}
+
 \input{Frontpage}
-%\section{}
-%\subsection{}
+\tableofcontents
+\setcounter{figure}{0}
+\listoffigures
+\input{Introduction}
+\input{Persistence}
+\input{Activities}
+\input{Challenges}
+\input{Conclusion}
 
 \end{document}  
