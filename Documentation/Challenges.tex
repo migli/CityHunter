@@ -1,1 +1,26 @@
 \chapter{Challenges}
+
+As already mentioned in the previous chapters, there are two different challenge classes in our application, namely 'QuestionChallenge' and 'CompassChallenge'. The 'QuestionChallenge' class represents a challenge where a user needs to find an answer to a specific question. The 'CompassChallenge' class represents a challenge where a user needs to interact with the compass of the device. Each of these challenge classes inherits from the abstract class 'Challenge'. This means, each challenge has a title, a description, a location, a maximum number of tries and a challenge type. Possible challenge types are: \\
+
+\begin{itemize}
+	\item Choose Date
+	\item Choose Picture
+	\item Guess Name
+	\item Find Direction
+\end{itemize}
+
+\section{Choose Date}
+
+The 'Choose Date' challenge is a question challenge. The user gets four possible dates as answer. Depending on the description of the challenge, the user has to select the right date or the wrong date out of these four dates. The user has normally two tries for this challenge.
+
+\section{Choose Picture}
+
+The 'Choose Picture' challenge is a question challenge. The user sees four different pictures. Depending on the description of the challenge, the user has to select the right picture or the wrong picture out of the four pictures. The user has normally two tries for this challenge.
+
+\section{Guess Name}
+
+The 'Guess Name' challenge is a question challenge. The user sees a picture and depending on the description of the challenge, the user needs to enter the name of the place or person on the picture. Since this is a more difficult challenge, the user has normally three tries for this challenge.
+
+\section{Find Direction}
+
+The 'Find Direction' challenge is a compass challenge. The user needs to hold his device in a certain direction for a certain amount of time. The direction depends on the description of the challenge. Since this is a more difficult challenge, the user has normally three tries for this challenge.
