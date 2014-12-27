@@ -38,7 +38,7 @@ public class GuessNameActivity extends ChallengeActivity {
 				return true;
 			}
 		});
-		if (!sharedPreferences.getAll().isEmpty()) {
+		if (sharedPreferences.contains("editText_1_text")) {
 			editText1.setText(sharedPreferences.getString("editText_1_text", ""));
 		} else {
 			editText1.setText("");

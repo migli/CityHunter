@@ -109,6 +109,7 @@ public class ChallengeActivity extends Activity {
 		editor = scoreSharedPreferences.edit();
 		editor.putInt("score", score);
 		editor.commit();
+		MysteryMapActivity.updateListView();
 	}
 	
 }

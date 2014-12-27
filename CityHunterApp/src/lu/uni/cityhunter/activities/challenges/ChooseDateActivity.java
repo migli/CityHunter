@@ -49,7 +49,7 @@ public class ChooseDateActivity extends ChallengeActivity {
 		button3.setOnClickListener(dateClickListener);
 		button4 = (Button) findViewById(R.id.dateButton4);
 		button4.setOnClickListener(dateClickListener);
-		if (!sharedPreferences.getAll().isEmpty()) {
+		if (sharedPreferences.contains("button_1_text")) {
 			button1.setText(sharedPreferences.getString("button_1_text", ""));
 			button1.setEnabled(sharedPreferences.getBoolean("button_1_enabled", true));
 			if (!sharedPreferences.getBoolean("button_1_enabled", true)) {

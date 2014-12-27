@@ -53,7 +53,7 @@ public class ChoosePictureActivity extends ChallengeActivity {
 		imageView4 = (ImageView) findViewById(R.id.pictureImageView4);
 		imageView4.setOnClickListener(pictureClickListener);
 		textView4 = (TextView) findViewById(R.id.pictureTextView4);
-		if (!sharedPreferences.getAll().isEmpty()) {
+		if (sharedPreferences.contains("imageView_1_tag")) {
 			imageView1.setImageResource(Integer.parseInt(sharedPreferences.getString("imageView_1_tag", "0"), 16)); imageView1.setTag(sharedPreferences.getString("imageView_1_tag", "0")); textView1.setText(sharedPreferences.getString("textView_1_text", ""));
 			imageView1.setEnabled(sharedPreferences.getBoolean("imageView_1_enabled", true));
 			if (!sharedPreferences.getBoolean("imageView_1_enabled", true)) {

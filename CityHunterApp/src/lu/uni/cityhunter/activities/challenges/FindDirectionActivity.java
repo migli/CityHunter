@@ -119,10 +119,10 @@ public class FindDirectionActivity extends ChallengeActivity implements SensorEv
             		azimuth.setText(String.valueOf(Math.round(azimuthInDegress))+"\u00b0"+" - 00:"+currentTime);
             	}
             } else {
-            	if (currentTime > 0) {
-            		nrOfTries++;
-            		displayWrongAnswerDialog();
-            	}
+//            	if (currentTime > 0) {
+//            		nrOfTries++;
+//            		displayWrongAnswerDialog();
+//            	}
             	currentTime = 0;
             	azimuth.setTextColor(Color.BLACK);
             	azimuth.setText(String.valueOf(Math.round(azimuthInDegress))+"\u00b0");
