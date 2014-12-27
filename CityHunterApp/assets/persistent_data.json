@@ -11,9 +11,9 @@
     	},
     	"mysteries" : [
     		{
-	    		"title" : "Mystery 1",
-	    		"question" : "As according to the comic series 'The Hitchhiker's Guide to the Galaxy', what is the sense of life?",
-	    		"answer" : "42",
+	    		"title" : "Grand Dukes of Luxembourg",
+	    		"question" : "How many Grand Dukes and Grand Duchesses reigned over Luxembourg since the independency in 1839, including the current Grand Duke?",
+	    		"answer" : "9",
 	    		"challenges" : [ 
 	    			{
 	    				"challengeType" : "CHOOSE_DATE",
@@ -94,7 +94,7 @@
 						"time" : 30
 	    			}
 	    		],
-	    		"hint" : "7 times 6"
+	    		"hint" : "The average period of rule per Grand Duke and Grand Duchess was 23 years, excluding the current Grand Duke."
 	    	}
     	]
     },

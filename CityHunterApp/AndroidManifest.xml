@@ -22,7 +22,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="lu.uni.cityhunter.permission.MAPS_RECEIVE" />
     
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Required to create test cases -->
+	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" />
 
     <!-- Required to show current location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -58,15 +59,18 @@
         </activity>
         <activity
             android:name=".activities.MysteryTabActivity"
-            android:label="@string/title_activity_mystery_tab" >
+            android:label="@string/title_activity_mystery_tab"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.MysteryMapActivity"
-            android:label="@string/title_activity_mystery_tab" >
+            android:label="@string/title_activity_mystery_tab"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".activities.MysteryInfoActivity"
-            android:label="@string/title_activity_mystery_tab" >
+            android:label="@string/title_activity_mystery_tab"
+            android:screenOrientation="portrait" >
         </activity>
 
         <meta-data
