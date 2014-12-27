@@ -8,7 +8,9 @@ import lu.uni.cityhunter.persistence.ChallengeState;
 import lu.uni.cityhunter.persistence.Mystery;
 import lu.uni.cityhunter.persistence.MysteryState;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -17,9 +19,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
-public class MysteryInfoActivity extends Activity{
+public class MysteryInfoActivity extends Activity implements OnEditorActionListener{
 	
 	private Mystery mystery;
 	private MysteryState mysteryState;
@@ -27,6 +28,7 @@ public class MysteryInfoActivity extends Activity{
 	private int score;
 	private SharedPreferences sharedPreferences;
 	private SharedPreferences scoreSharedPreferences;
+	private EditText answer;
 	
 	public static final String MYSTERY_1_PREFERENCES = "uni.lu.cityhunter.mystery_1";
 	
@@ -75,6 +77,9 @@ public class MysteryInfoActivity extends Activity{
 		        return true;
 		    }
 		});
+		
+		answer = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);
+		answer.setOnEditorActionListener(this);
 	}
 	
 	private void displayHint(){
@@ -138,5 +143,54 @@ public class MysteryInfoActivity extends Activity{
 		ChallengeState challengeState = ChallengeState.values()[sharedPreferences.getInt("challengeState", ChallengeState.PLAYING.ordinal())];
 		return challengeState;
 	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		if (actionId == EditorInfo.IME_ACTION_DONE) {
+			String mysterySolution = mystery.getAnswer();
+            // Check if answer right
+        	String answerStr = answer.getText().toString();
+        	
+        	// Hide Software Keyboard
+        	EditText myEditText = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);  
+        	InputMethodManager imm = (InputMethodManager)getSystemService(
+        	      Context.INPUT_METHOD_SERVICE);
+        	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
+        	
+        	if(mysterySolution.equals(answerStr)){
+        		// Display Success Dialog
+        		this.displayCorrectAnswerDialog();
+        	}else{
+        		// Display 'Wrong Answer' Dialog
+        		this.displayWrongAnswerDialog();
+        	}
+        }
+        return true;
+	}
+	
+	public void displayCorrectAnswerDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("Congrats you solved the mystery!").setTitle("You Won");
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+				finish();
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
+	public void displayWrongAnswerDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage("You entered the wrong answer to the mystery!\nTry again!").setTitle("Wrong Answer");
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int id) {
+					// do nothing
+			}
+		});
+		AlertDialog dialog = builder.create();
+		dialog.show();
+	}
+	
 	
 }

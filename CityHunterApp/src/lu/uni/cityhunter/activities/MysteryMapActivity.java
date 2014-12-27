@@ -11,6 +11,7 @@ import lu.uni.cityhunter.activities.challenges.ChooseDateActivity;
 import lu.uni.cityhunter.activities.challenges.ChoosePictureActivity;
 import lu.uni.cityhunter.activities.challenges.FindDirectionActivity;
 import lu.uni.cityhunter.activities.challenges.GuessNameActivity;
+import lu.uni.cityhunter.mocklocations.MockLocationProvider;
 import lu.uni.cityhunter.persistence.Challenge;
 import lu.uni.cityhunter.persistence.ChallengeState;
 import lu.uni.cityhunter.persistence.Mystery;
@@ -66,10 +67,11 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 											LocationListener, OnItemClickListener {
 
 	private final static int GOOGLE_PLAY_SERVICES_ERROR_RESOLUTION = 9999;
-	private final static float GEOFENCE_RADIUS = 50; // in meters
-	private final static long GEOFENCE_EXPIRATION_DURATION = 1000*60*60*12; 
+	private final static float GEOFENCE_RADIUS = 100; // in meters
+	private final static long GEOFENCE_EXPIRATION_DURATION = 1000*60*60;
 	
-	private boolean isLogging = false;
+	private final boolean isLogging = false;
+	private final boolean useMockLocations = true;
 
 	// Static variables of run and this instance needed, in order to update 
 	// ListView when Geofences are triggered!
@@ -77,14 +79,12 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	private static MysteryMapActivity INSTANCE = null;
 	
 	static final LatLng LUXEMBOURG = new LatLng(49.611498, 6.131750);
-//	static final LatLng LUXEMBOURG = new LatLng(49.626597, 6.158986);
 
 	private boolean isMapFullscreen = false;
-	private boolean geofencesAdded = false;
 
 	private GoogleApiClient googleApiClient;
-    private PendingIntent geofenceRequestIntent;
-	private ArrayList<Geofence> geofences;
+	
+	private MockLocationProvider mock;
 
 	private GoogleMap map;
 	private Mystery mystery;
@@ -120,8 +120,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		map.setInfoWindowAdapter(infoAdapter);
 		
 		
-		// Get and set challenge markers + geofences
-		geofences = new ArrayList<Geofence>();
+		// Get and set challenge markers
 		Iterator<Challenge> iter = c.iterator();
 		while(iter.hasNext()){
 			Challenge challenge = iter.next(); 
@@ -130,16 +129,8 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 			.position(challenge.getLocation())
 			.title(challenge.getTitle())
 			.icon(BitmapDescriptorFactory.fromResource(R.drawable.map_marker)));
-			
-			//Create and add Geofence
-			Geofence g = new Geofence.Builder()
-			.setRequestId(challenge.getTitle())
-			.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-			.setCircularRegion(challenge.getLocation().latitude, challenge.getLocation().longitude, GEOFENCE_RADIUS)
-			.setExpirationDuration(GEOFENCE_EXPIRATION_DURATION)
-			.build();
-			this.geofences.add(g);
 		}
+		
 		this.addGeofences();
 		
 		// Move the camera instantly to luxembourg with a zoom of 15.
@@ -171,6 +162,15 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		// Initialize the current location manager
 		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 10, this);
+		
+		// Mock Locations:
+		if(useMockLocations){
+			mock = new MockLocationProvider(LocationManager.GPS_PROVIDER, this);
+			//Change Location Source of the map
+			map.setLocationSource(mock);
+			// Start at the following position:
+			mock.pushLocation(49.609494, 6.126343);
+		}
 	}
 	
 	public static void updateListView(){
@@ -207,20 +207,6 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		this.updateIndexOfChallenge();
 		directions.request(currentLocation, mystery.getChallenge(indexOfChallenge).getLocation(), GoogleDirection.MODE_WALKING);
 	}
-	
-//	private void requestDirections(ArrayList<LatLng> path){
-//		Iterator<LatLng> iter = path.iterator();
-//		if(!path.isEmpty()){
-//			LatLng start = iter.next();
-//			while(iter.hasNext()){
-//				LatLng end = iter.next();
-//				// Request the directions:
-//				directions.request(start, end, GoogleDirection.MODE_WALKING);
-//				start = end;
-//			}
-//		}
-//	}
-	
 	
 	
 	@Override
@@ -285,9 +271,13 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		}
 	}
 	
-	private PendingIntent getTransitionPendingIntent() {
+	private PendingIntent getTransitionPendingIntent(Challenge challenge) {
         // Create an explicit Intent
         Intent intent = new Intent(this, ReceiveTransitionsIntentService.class);
+        Bundle bundle = new Bundle();  
+        bundle.putParcelableArrayList(Challenge.CHALLENGE_PAR_KEY, mystery.getChallenges());  
+        intent.putExtras(bundle);
+        intent.addCategory(challenge.getTitle());
         
         return PendingIntent.getService( this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
@@ -343,36 +333,55 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 
 	@Override
 	public void onConnected(Bundle bundle) {
-		geofenceRequestIntent = getTransitionPendingIntent();
-		GeofencingRequest request = new GeofencingRequest.Builder().addGeofences(geofences).build();
-		PendingResult<Status> result = LocationServices.GeofencingApi.addGeofences(googleApiClient, request, geofenceRequestIntent);
-		result.setResultCallback(new ResultCallback<Status>() {
-	        @Override
-	        public void onResult(Status status) {
-	            if (status.isSuccess()) {
-	                // Successfully registered
-	                if(isLogging)
-	                	Log.i("onConnected", "Successfully added Geofences!");
-	                geofencesAdded = true;
-	            } else if (status.hasResolution()) {
-	                // Google provides a way to fix the issue
-	                /*
+		Iterator<Challenge> iter = mystery.getChallenges().iterator();
+		while(iter.hasNext()){
+			Challenge challenge = iter.next();
+			PendingIntent geofenceRequestIntent = getTransitionPendingIntent(challenge);
+			
+			Geofence geofence = new Geofence.Builder()
+			.setRequestId(challenge.getTitle())
+			.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
+			.setCircularRegion(challenge.getLocation().latitude, challenge.getLocation().longitude, GEOFENCE_RADIUS)
+			.setExpirationDuration(GEOFENCE_EXPIRATION_DURATION)
+			.build();
+			
+			GeofencingRequest request = new GeofencingRequest.Builder().addGeofence(geofence).build();
+			PendingResult<Status> result = LocationServices.GeofencingApi.addGeofences(googleApiClient, request, geofenceRequestIntent);
+			result.setResultCallback(new ResultCallback<Status>() {
+				@Override
+				public void onResult(Status status) {
+					if (status.isSuccess()) {
+						// Successfully registered
+						if(isLogging)
+							Log.i("onConnected", "Successfully added Geofence!");
+						//	                geofencesAdded = true;
+					} else if (status.hasResolution()) {
+						// Google provides a way to fix the issue
+						if(isLogging)
+							Log.i("onConnected", "Problem adding Geofence!");
+						/*
 	                status.startResolutionForResult(
 	                        mContext,     // your current activity used to receive the result
 	                        RESULT_CODE); // the result code you'll look for in your
 	                // onActivityResult method to retry registering
-	                */
-	            } else {
-	                // No recovery.
-	                Log.e("onConnected", "Registering failed: " + status.getStatusMessage());
-	            }
-	        }
-	    });
+						 */
+					} else {
+						// No recovery.
+						if(isLogging)
+							Log.e("onConnected", "Registering failed: " + status.getStatusMessage());
+					}
+				}
+			});
+		}
 	}
 	
 	@Override
 	public void onResponse(String status, Document doc, GoogleDirection gd) {
 		ArrayList<LatLng> directionPoint = directions.getDirection(doc);
+		
+		if(useMockLocations)
+			mock.simulatePath(directionPoint);
+		
 		if(isLogging)
 			Log.i("MysteryMapActivity", "Get direction status: "+directions.getStatus(doc));
 		if(route != null){
@@ -394,8 +403,8 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 			Log.i("MysteryMapActivity", "Location changed!");
 		updateIndexOfChallenge();
 		currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-		if(!geofencesAdded)
-			checkDistancesToChallenges();
+//		if(!geofencesAdded)
+//			checkDistancesToChallenges();
 		LatLng end = mystery.getChallenges().get(indexOfChallenge).getLocation();
 		// Request the directions:
 		directions.request(currentLocation, end, GoogleDirection.MODE_WALKING);
@@ -484,34 +493,34 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		return challengeState;
 	}
 	
-	private void checkDistancesToChallenges(){
-		if(currentLocation != null){
-			ArrayList<Challenge> challenges = mystery.getChallenges();
-			Iterator<Challenge> iter = challenges.iterator();
-			while(iter.hasNext()){
-				Challenge c = iter.next();
-				float[] distance = new float[1];
-				Location.distanceBetween(currentLocation.latitude, currentLocation.longitude, 
-						c.getLocation().latitude, c.getLocation().longitude, distance);
-				if(distance[0] <= GEOFENCE_RADIUS){
-					ChallengeState state = this.getChallengeState(c);
-					if(state == ChallengeState.INACTIVE){
-						// Change Challenge state to ACTIVE
-						SharedPreferences.Editor editor = sharedPreferences.edit();
-						editor.putInt("challengeState", ChallengeState.ACTIVE.ordinal());
-						editor.commit();
-					}
-				}
-			}
-		}else{
-			if(isLogging)
-				Log.e("MysteryMapActivity", "Current location is null in 'checkDistancesToChallenges'!");
-		}
-	}
+//	private void checkDistancesToChallenges(){
+//		if(currentLocation != null){
+//			ArrayList<Challenge> challenges = mystery.getChallenges();
+//			Iterator<Challenge> iter = challenges.iterator();
+//			while(iter.hasNext()){
+//				Challenge c = iter.next();
+//				float[] distance = new float[1];
+//				Location.distanceBetween(currentLocation.latitude, currentLocation.longitude, 
+//						c.getLocation().latitude, c.getLocation().longitude, distance);
+//				if(distance[0] <= GEOFENCE_RADIUS){
+//					ChallengeState state = this.getChallengeState(c);
+//					if(state == ChallengeState.INACTIVE){
+//						// Change Challenge state to ACTIVE
+//						SharedPreferences.Editor editor = sharedPreferences.edit();
+//						editor.putInt("challengeState", ChallengeState.ACTIVE.ordinal());
+//						editor.commit();
+//					}
+//				}
+//			}
+//		}else{
+//			if(isLogging)
+//				Log.e("MysteryMapActivity", "Current location is null in 'checkDistancesToChallenges'!");
+//		}
+//	}
 
 	@Override
 	public void onConnectionSuspended(int cause) {
 		// nothing
 	}
-
+	
 }

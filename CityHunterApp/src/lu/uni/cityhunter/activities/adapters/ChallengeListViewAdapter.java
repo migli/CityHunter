@@ -6,6 +6,7 @@ import lu.uni.cityhunter.R;
 import lu.uni.cityhunter.activities.ChallengeActivity;
 import lu.uni.cityhunter.persistence.Challenge;
 import lu.uni.cityhunter.persistence.ChallengeState;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+@SuppressLint("InflateParams") 
 public class ChallengeListViewAdapter extends BaseAdapter{
 	
 	private boolean isLogging = false;
@@ -44,7 +46,7 @@ public class ChallengeListViewAdapter extends BaseAdapter{
 		return position;
 	}
 
-	@Override
+	@SuppressLint("InflateParams") @Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View v = convertView;
 		Challenge c = this.challenges.get(position);
