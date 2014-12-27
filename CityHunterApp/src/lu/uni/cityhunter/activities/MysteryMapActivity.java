@@ -70,7 +70,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 	private final static float GEOFENCE_RADIUS = 100; // in meters
 	private final static long GEOFENCE_EXPIRATION_DURATION = 1000*60*60;
 	
-	private final boolean isLogging = false;
+	private final boolean isLogging = true;
 	private final boolean useMockLocations = true;
 
 	// Static variables of run and this instance needed, in order to update 
@@ -435,7 +435,7 @@ public class MysteryMapActivity extends FragmentActivity implements OnClickListe
 		ChallengeState state = this.getChallengeState(challenge);
 		if(isLogging)
 			Log.i("MysteryMapActivity", "Challenge '"+challenge.getTitle()+"' in state '"+state+"'!");
-		state = ChallengeState.ACTIVE;
+		
 		if(state == ChallengeState.ACTIVE || state == ChallengeState.PLAYING){
 			Intent intent;
 			switch (challenge.getType()) {

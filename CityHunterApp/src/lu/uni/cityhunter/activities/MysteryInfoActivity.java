@@ -19,8 +19,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
-public class MysteryInfoActivity extends Activity implements OnEditorActionListener{
+public class MysteryInfoActivity extends Activity {
 	
 	private Mystery mystery;
 	private MysteryState mysteryState;
@@ -28,7 +29,6 @@ public class MysteryInfoActivity extends Activity implements OnEditorActionListe
 	private int score;
 	private SharedPreferences sharedPreferences;
 	private SharedPreferences scoreSharedPreferences;
-	private EditText answer;
 	
 	public static final String MYSTERY_1_PREFERENCES = "uni.lu.cityhunter.mystery_1";
 	
@@ -78,8 +78,6 @@ public class MysteryInfoActivity extends Activity implements OnEditorActionListe
 		    }
 		});
 		
-		answer = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);
-		answer.setOnEditorActionListener(this);
 	}
 	
 	private void displayHint(){
@@ -142,30 +140,6 @@ public class MysteryInfoActivity extends Activity implements OnEditorActionListe
 		}
 		ChallengeState challengeState = ChallengeState.values()[sharedPreferences.getInt("challengeState", ChallengeState.PLAYING.ordinal())];
 		return challengeState;
-	}
-
-	@Override
-	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		if (actionId == EditorInfo.IME_ACTION_DONE) {
-			String mysterySolution = mystery.getAnswer();
-            // Check if answer right
-        	String answerStr = answer.getText().toString();
-        	
-        	// Hide Software Keyboard
-        	EditText myEditText = (EditText) findViewById(R.id.mysteryInfo_solveMysteryInput);  
-        	InputMethodManager imm = (InputMethodManager)getSystemService(
-        	      Context.INPUT_METHOD_SERVICE);
-        	imm.hideSoftInputFromWindow(myEditText.getWindowToken(), 0);
-        	
-        	if(mysterySolution.equals(answerStr)){
-        		// Display Success Dialog
-        		this.displayCorrectAnswerDialog();
-        	}else{
-        		// Display 'Wrong Answer' Dialog
-        		this.displayWrongAnswerDialog();
-        	}
-        }
-        return true;
 	}
 	
 	public void displayCorrectAnswerDialog() {
