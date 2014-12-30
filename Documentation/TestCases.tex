@@ -2,13 +2,17 @@
 
 In this chapter we will provide 2 test cases describing the steps to:
 \begin{enumerate}
-	\item run successfully through all challenges and get the hint to the mystery.
-	\item run unsuccessfully through several challenges and see the different states of the challenges.
+	\item Run successfully through all challenges and get the hint to the mystery.
+	\item Run unsuccessfully through several challenges and see the different states of the challenges.
 \end{enumerate}
 The correct answers and the number of tries will be shown between brackets in the test case descriptions.
-
-In order to simulate a run through the city we used ``mock locations''. Hence it is important to tick the ``\emph{Allow Mock Locations}'' in the developer options of your device.\\
-Furthermore, we only use mock locations in the Mystery Map Activity. A click on a route button, as shown in figure~\ref{fig:routeButtons}, will automatically launch a thread which will feed the location service of the device with the location points of the direction. In order to avoid inconsistencies on the map, no new thread will be started when another one is still running.
+\noindent
+\\
+\newline
+We used ``mock locations'' in order to simulate a run through the city. Hence it is important to tick the ``\emph{Allow Mock Locations}'' in the developer options of your device.
+\\
+\newline
+Furthermore, we only use mock locations in the Mystery Map Activity. A click on a route button, as shown in Figure~\ref{fig:routeButtons}, will automatically launch a thread which will feed the location service of the device with the location points of the direction. In order to avoid inconsistencies on the map, no new thread will be started when another one is still running.
 
 \begin{figure}[H]
 	\centering
@@ -19,15 +23,15 @@ Furthermore, we only use mock locations in the Mystery Map Activity. A click on 
 
 After the installation of the City Hunter App the following test cases can be performed:
 
-\section{Test Case 1: a successful run}
+\section{Test Case 1: A Successful Run}
 \begin{enumerate}
 	\item Start the City Hunter App.
 	\item Click on the ``\emph{All Cities}'' button.
 	\item Choose ``\emph{Luxembourg}''.
 	\item Choose the ``\emph{Grand Dukes of Luxembourg}'' mystery.
-	\item Wait until the current-location-marker (CLM) arrived at the first challenge ``\emph{Gëlle Fra}''. In the list view, the challenge changed the state to active. Click on it.
+	\item Wait until the current-location-marker (CLM) arrived at the first challenge ``\emph{G\"elle Fra}''. In the list view, the challenge changed the state to active. Click on it.
 	\item Choose the right answer. (\emph{1985}, \emph{2 tries}) 
-	\item Click on the ``\emph{Next Challenge}'' button as shown in figure~\ref{fig:nextChallengeButton}, and wait until the CLM arrived.
+	\item Click on the ``\emph{Next Challenge}'' button as shown in Figure~\ref{fig:nextChallengeButton}, and wait until the CLM arrived.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.4]{Figures/NextChallengeButton}
@@ -36,7 +40,7 @@ After the installation of the City Hunter App the following test cases can be pe
 		\end{figure}
 	\item Click on the ``\emph{Notre-Dame Cathedral}'' challenge and choose the correct answer. (\emph{Adolphe, 2 tries})
 	\item In the list view click on the ``\emph{Place de Clairefontaine}'' challenge and wait until the CLM arrived.
-	\item Click on the ``\emph{Place de Clairefontaine}'' challenge and do the challenge. (\emph{between 100 $^{\circ}$-120 $^{\circ}$, infinite tries})
+	\item Click on the ``\emph{Place de Clairefontaine}'' challenge and do the challenge. (\emph{Hold your device between 100 $^{\circ}$ and 120 $^{\circ}$, infinite tries})
 	\item In the list view, click on the ``\emph{Grand Ducal Palace}'' challenge and wait until the CLM arrived.
 	\item Click on the ``\emph{Grand Ducal Palace}'' challenge and choose the correct picture. (\emph{Guard in the sun, 2 tries})
 	\item In the list view, click on the ``\emph{Place Guillaume II}'' challenge and wait until the CLM arrived.
@@ -44,10 +48,10 @@ After the installation of the City Hunter App the following test cases can be pe
 	\item Click on the ``\emph{Mystery}'' Tab and solve the mystery. (\emph{9, infinite tries})
 \end{enumerate}
 
-\section{Test Case 2: an unsuccessful run}
+\section{Test Case 2: An Unsuccessful Run}
 \begin{enumerate}
 	\item Start the City Hunter App.
-	\item Click on the ``\emph{Option}'' button as shown in figure~\ref{fig:optionButton} and choose ``\emph{Settings}''.
+	\item Click on the ``\emph{Option}'' button as shown in Figure~\ref{fig:optionButton} and choose ``\emph{Settings}''.
 		\begin{figure}[H]
 			\centering
 			\includegraphics[scale=0.3]{Figures/SettingsButton}
@@ -59,16 +63,16 @@ After the installation of the City Hunter App the following test cases can be pe
 	\item Click on the ``\emph{All Cities}'' button.
 	\item Choose ``\emph{Luxembourg}''.
 	\item Choose the ``\emph{Grand Dukes of Luxembourg}'' mystery.
-	\item Wait until the current-location-marker (CLM) arrived at the first challenge ``\emph{Gëlle Fra}''.
-	\item Click on the ``\emph{Gëlle Fra}'' challenge and choose 2 wrong answers. (\emph{1985}, \emph{2 tries}) 
+	\item Wait until the current-location-marker (CLM) arrived at the first challenge ``\emph{G\"elle Fra}''.
+	\item Click on the ``\emph{G\"elle Fra}'' challenge and choose 2 wrong answers. (\emph{1980}, \emph{1991}) 
 	\item In the list view, click on the ``\emph{Place Guillaume II}'' challenge and wait until the CLM arrived.
-	\item Click on the ``\emph{Place Guillaume II}'' challenge and enter 3 times a wrong answer. (\emph{Knuedler, 3 tries})
+	\item Click on the ``\emph{Place Guillaume II}'' challenge and enter 3 times a wrong answer.
 	\item In the list view click on the ``\emph{Place de Clairefontaine}'' challenge and wait until the CLM arrived.
-	\item Click on the ``\emph{Place de Clairefontaine}'' challenge and succeed the challenge. (\emph{between 100 $^{\circ}$-120 $^{\circ}$, infinite tries})
+	\item Click on the ``\emph{Place de Clairefontaine}'' challenge and succeed the challenge. (\emph{Hold your device between 100 $^{\circ}$ and 120 $^{\circ}$, infinite tries})
 	\item In the list view click on the ``\emph{Notre-Dame Cathedral}'' challenge and wait until the CLM arrived.
 	\item Click on the ``\emph{Notre-Dame Cathedral}'' challenge and choose the correct answer. (\emph{Adolphe, 2 tries})
 	\item In the list view, click on the ``\emph{Grand Ducal Palace}'' challenge and wait until the CLM arrived.
-	\item Click on the ``\emph{Grand Ducal Palace}'' challenge and choose 2 wrong pictures. (\emph{Guard in the sun, 2 tries})
+	\item Click on the ``\emph{Grand Ducal Palace}'' challenge and choose 2 wrong pictures. (\emph{Swiss guard, British guard})
 	\item Click on the ``\emph{Mystery}'' Tab and solve the mystery. (\emph{9, infinite tries})
 \end{enumerate}
 
