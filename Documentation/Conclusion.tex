@@ -4,3 +4,15 @@
 
 There are clearly some limitations inside of our application and aspects which could be improved. Creating static shared preferences for each challenge and mystery is not a long term solution. We like the idea of saving the user related data as shared preferences. However, it is not so trivial to create shared preferences on the run and creating shared preferences for each challenge and mystery also seems a bit of an overhead, but due to the timing constraints we couldn't elaborate a better solution than just creating static shared preferences. Furthermore, we decided to use JSON as data format for the persistent data, because we wanted to have the future possibility to update the cities, challenges and mysteries easily over the network from a server. A final improvement would also be creating more different types of challenges, so not only question challenges or compass challenges, but also challenges which maybe make use of the camera of the device.
 
+\section{Conclusion}
+
+The City Hunter app provides a fun way to learn about cities and their history. We designed the code to be flexible and easily extendible. The challenges, mysteries and cities can be extended by simply modifying the persistent JSON file. Furthermore, the hierarchical structure of challenges enables developers to introduce new challenge types without changing too much code.
+We introduced a lot of Android concepts, such as intents and intent services, location services, shared preferences, sensors, animations, ... and mock locations in order to test the application.
+
+All in all the project was a lot of work and gave us a deep insight into Android. During the development we encountered a lot of problems, which showed us that there is still a lot of work to be done in order to improve the developer experience in this domain. 
+%Wann et ze vill ass, einfach ab hei löschen:
+Before even getting started with programming, there is a big issue with the Android emulator, which does run very slowly or, after installing some software to speed it up, does not really support every feature, e.g. Google Play Services. Some code of Android is not clearly marked as deprecated and often you only find tutorials with deprecated and sometimes wrong code in the official Android documentation, e.g. Geofences. Furthermore, some code, supposed to replace deprecated code, does not behave as described in the official documentation, see GeofencingEvent.
+
+All in all, we struggled a lot, since our code rarely worked right away.
+%Bis heihinner löschen
+Nevertheless, we learnt a lot about the possibilities of Android.
